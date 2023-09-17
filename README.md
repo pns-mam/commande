@@ -5,8 +5,6 @@
 
 [Discussion](https://github.com/pns-mam/commande/discussions/1)
 
-[Teams](https://teams.microsoft.com/l/meetup-join/19:B2xSBwJ8am2KtZlpwM8DIdmR6AToeNDuYv7HnB5hgQE1@thread.tacv2/1662962930037?context=%7B%22Tid%22:%22bc20447d-8952-4acd-83e4-5d68b5ece46f%22,%22Oid%22:%22c4c23b33-86a3-4bd7-9b36-ab4830766806%22%7D)
-
 # Plan du cours
 
 1. Introduction
