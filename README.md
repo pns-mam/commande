@@ -44,8 +44,6 @@ TP 5 - OpenAI gym: taxi!
 
 # Références
 
-[Atolia, M.; Loungani, P.; Maurer, H.; Semmler, W. Optimal control of a global model of climate change with adaptation and mitigation. *Mathematical Control & Related Fields* **13** (2023), no. 2, 583-604](https://doi.org/10.3934/mcrf.2022009)
-
 [Bertsekas, D. *A course in reinforcement learning.* Athena scientific, 2023](https://www.mit.edu/~dimitrib/RLCOURSECOMPLETE.pdf)
 
 [Borkar, X.; Meyn, S. P. The ODE method for convergence of stochastic approximation and reinforcement learning. *SIAM J. Control Optim.* **38** (2000), no. 2, 447-469](https://epubs.siam.org/doi/abs/10.1137/S0363012997331639?journalCode=sjcodc&mobileUi=0)
@@ -55,7 +53,6 @@ TP 5 - OpenAI gym: taxi!
 Fleming, W. H. ; Rishel, *R. W. Deterministic and stochastic optimal control.* Springer, 1975
 
 Gardner, M. *The unexpected hanging and other mathematical diversions.* University of Chicago Press, 1991
-
 
 [Recht, B. A tour of reinforcement learning : the view from continuous control. arXiv :1806.09460, 2018](https://arxiv.org/pdf/1806.09460.pdf)
 
