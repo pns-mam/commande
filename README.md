@@ -18,7 +18,7 @@
 
 CM 1
 
-[TP 1 - Navigation]()
+[TP 1 - Navigation](https://github.com/pns-mam/commande/blob/master/tp1/navigation.ipynb)
 
 TP 2 - Tir simple
 
