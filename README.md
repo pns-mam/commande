@@ -38,9 +38,9 @@ TP 5 - OpenAI gym: taxi!
 - 1 EX partiel (coeff. 1)
 - 1 EX terminal (coeff. 1)
 
-[Exam CC no. 1 (2022-23)](exam-cc1-old/exam-cc1.pdf)
+[Exam CC no. 1 (2022-23)](exam-cc1-old/exam-cc1.ipynb)
 
-[Exam CC no. 2 (2022-23)](exam-cc2-old/exam-cc2.pdf)
+[Exam CC no. 2 (2022-23)](exam-cc2-old/exam-cc2.md)
 
 # Références
 
