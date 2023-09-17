@@ -1,9 +1,9 @@
 ![PNS](logo-pns.png)
 ## MAM5-INUM
 # Commande optimale
-# 2022-2023
+# 2023-24
 
-[Slack](https://pns-mam5.slack.com/archives/C041YHMFWVC)
+[Discussion](https://github.com/pns-mam/commande/discussions/1)
 
 [Teams](https://teams.microsoft.com/l/meetup-join/19:B2xSBwJ8am2KtZlpwM8DIdmR6AToeNDuYv7HnB5hgQE1@thread.tacv2/1662962930037?context=%7B%22Tid%22:%22bc20447d-8952-4acd-83e4-5d68b5ece46f%22,%22Oid%22:%22c4c23b33-86a3-4bd7-9b36-ab4830766806%22%7D)
 
@@ -16,35 +16,17 @@
 5. Model predictive control
 6. Reinforcement learning
 
-[CM 1](https://git.polytech.unice.fr/MAM/commande/-/raw/master/cm/cm1.pdf)
+CM 1
 
-[CM 2](https://git.polytech.unice.fr/MAM/commande/-/raw/master/cm/cm2.pdf)
+[TP 1 - Navigation]()
 
-[CM 3](https://git.polytech.unice.fr/MAM/commande/-/raw/master/cm/cm3.pdf)
+TP 2 - Tir simple
 
-[CM 4](https://git.polytech.unice.fr/MAM/commande/-/raw/master/cm/cm4.pdf)
+TP 3 - MPC
 
-[CM 5](https://git.polytech.unice.fr/MAM/commande/-/raw/master/cm/cm5.pdf)
+TP 4 - Hexapawn
 
-[CM 6](https://git.polytech.unice.fr/MAM/commande/-/raw/master/cm/cm6.pdf)
-
-[CM 7](https://git.polytech.unice.fr/MAM/commande/-/raw/master/cm/cm7.pdf)
-
-[TP 1 - Navigation](https://git.polytech.unice.fr/MAM/commande/-/blob/master/tp1/navigation.ipynb)
-([solution](https://git.polytech.unice.fr/MAM/commande/-/blob/master/tp1/navigation-sol.ipynb))
-([solution 3 arcs](https://git.polytech.unice.fr/MAM/commande/-/blob/master/tp1/navigation-bsb.ipynb))
-
-[TP 2 - Tir simple](https://git.polytech.unice.fr/MAM/commande/-/blob/master/tp2/tp2.ipynb)
-([solution](https://git.polytech.unice.fr/MAM/commande/-/blob/master/tp2/tp2-sol.ipynb))
-
-[TP 3 - MPC](https://git.polytech.unice.fr/MAM/commande/-/blob/master/tp3/navigation-mpc.ipynb)
-([solution](https://git.polytech.unice.fr/MAM/commande/-/blob/master/tp3/navigation-mpc-sol.ipynb))
-
-[TP 4 - Hexapawn](https://git.polytech.unice.fr/MAM/commande/-/blob/master/tp4/hexapawn.ipynb)
-([solution](https://git.polytech.unice.fr/MAM/commande/-/blob/master/tp4/hexapawn-sol.ipynb))
-
-[TP 5 - OpenAI gym: taxi!](https://git.polytech.unice.fr/MAM/commande/-/blob/master/tp5/q-taxi.ipynb)
-([solution](https://git.polytech.unice.fr/MAM/commande/-/blob/master/tp5/q-taxi-sol.ipynb))
+TP 5 - OpenAI gym: taxi!
 
 # Organisation et intervenant
 
@@ -56,13 +38,9 @@
 - 1 EX partiel (coeff. 1)
 - 1 EX terminal (coeff. 1)
 
-[Exam CC no. 1](exam-cc1/exam-cc1.ipynb)
+[Exam CC no. 1 (2022-23)](exam-cc1-old/exam-cc1.pdf)
 
-[Exam CC no. 2](exam-cc2/exam-cc2.md)
-
-[Exam CC no. 1 (2021-22)](exam-cc1-old/exam-cc1.pdf)
-
-[Exam CC no. 2 (2021-22)](exam-cc2-old/exam-cc2.pdf)
+[Exam CC no. 2 (2022-23)](exam-cc2-old/exam-cc2.pdf)
 
 # Références
 
