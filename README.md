@@ -16,6 +16,8 @@
 
 [CM 1](https://github.com/pns-mam/commande/blob/master/cm/cm1.pdf)
 
+[CM 2](https://github.com/pns-mam/commande/blob/master/cm/cm2.pdf)
+
 [TP 1 - Navigation](https://github.com/pns-mam/commande/blob/master/tp1/navigation.ipynb)
 
 TP 2 - Tir simple
