@@ -33,8 +33,9 @@
 [(solution à 3 arcs)](https://github.com/pns-mam/commande/blob/master/tp1/navigation-bsb.ipynb)
 
 [TP 2 - Tir simple](https://github.com/pns-mam/commande/blob/master/tp2/tp2.ipynb)
+[(solution)](https://github.com/pns-mam/commande/blob/master/tp2/tp2-sol.ipynb)
 
-TP 3 - MPC
+[TP 3 - MPC](https://github.com/pns-mam/commande/blob/master/tp3/navigation-mpc.ipynb)
 
 TP 4 - Hexapawn
 
