@@ -61,9 +61,9 @@ TP 5 - OpenAI gym: taxi!
 
 [Borkar, X.; Meyn, S. P. The ODE method for convergence of stochastic approximation and reinforcement learning. *SIAM J. Control Optim.* **38** (2000), no. 2, 447-469](https://epubs.siam.org/doi/abs/10.1137/S0363012997331639?journalCode=sjcodc&mobileUi=0)
 
-[Ekeland I. Mathematics in the social sciences. Torino lectures, 2022.](https://www.ceremade.dauphine.fr/~ekeland/lectures/Torino.pdf)
+[Ekeland I. Mathematics in the social sciences. Torino lectures, 2022](https://www.ceremade.dauphine.fr/~ekeland/lectures/Torino.pdf)
 
-[Evans, L. C. *An introduction to mathematical optimal control theory.* Univ. California, 2008.](refs/evans-control-2008a.pdf)
+[Evans, L. C. *An introduction to mathematical optimal control theory.* Univ. California, 2008](refs/evans-control-2008a.pdf)
 
 Fleming, W. H. ; Rishel, *R. W. Deterministic and stochastic optimal control.* Springer, 1975
 
