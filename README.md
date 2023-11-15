@@ -71,7 +71,7 @@ TP 5 - OpenAI gym: taxi!
 
 Fleming, W. H. ; Rishel, *R. W. Deterministic and stochastic optimal control.* Springer, 1975
 
-Gardner, M. *The unexpected hanging and other mathematical diversions.* University of Chicago Press, 1991
+Gardner, M. *The unexpected hanging and other mathematical diversions.* University of Chicago Press, 1991.
 
 [Recht, B. A tour of reinforcement learning : the view from continuous control. arXiv :1806.09460, 2018](https://arxiv.org/pdf/1806.09460.pdf)
 
