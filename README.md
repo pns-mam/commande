@@ -39,7 +39,7 @@
 
 [TP 3 - MPC](https://github.com/pns-mam/commande/blob/master/tp3/navigation-mpc.ipynb)
 
-TP 4 - Hexapawn
+TP 4 - Hexapawn 
 
 TP 5 - OpenAI gym: taxi!
 
