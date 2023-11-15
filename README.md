@@ -43,7 +43,7 @@ TP 4 - Hexapawn
 
 TP 5 - OpenAI gym: taxi!
 
-# Organisation et intervenant
+# Organisation et intervenants
 
 - 10 séances de 3H
 - [J.-B. Caillau](mailto:jean-baptiste.caillau@univ-cotedazur.fr)
