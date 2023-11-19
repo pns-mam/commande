@@ -58,7 +58,9 @@ En déduire le contrôle optimal.
 ### 1.8
 Déterminer le temps minimal en fonction des conditions initiales $(q_0,\dot{q}_0)$.
 
-**Réponse.** Les trajectoires sont donc des arcs de paraboles passant par $(q_0,\dot{q}_0)$ et intersectant la cible $\dot{q}=0$ (axe horizontal). On en déduit l'unicité de solution (l'existence étant admise).
+**Réponse.** La trajectoire est donc l'unique arc de parabole passant par $(q_0,\dot{q}_0)$ et intersectant la cible $\dot{q}=0$ (axe horizontal). On en déduit l'unicité de solution (l'existence étant admise) et la valeur du temps minimum en fonction des conditions initiales (fonction valeur du problème) :
+
+$$ t_f(q_0,\dot{q}_0) = XXX . $$
 
 ### 1.9
 Dessiner la synthèse dans le plan $(q,\dot{q})$.
@@ -84,47 +86,50 @@ $$ q(0)=\dot{q}(0)=0,\quad q(t_f)=1. $$
 ### 2.1
 On pose $x(t)=(q(t),\dot{q}(t))$, mettre la dynamique sous la forme $\dot{x}(t)=f(x(t),u(t))$ avec $f$ une fonction que l'on précisera.
 
-**Réponse.**
+**Réponse.** $f(x,u) = (x_2,u)$
 
 ### 2.2
 Écrire le hamiltonien du problème.
 
-**Réponse.**
+**Réponse.** $H(x,p,u) = p^0 u^4 + p_1 x_2 + p_2 u$
 
 ### 2.3
 Écrire le système adjoint.
 
 **Réponse.**
 
+$$ \dot{p}_1 = 0,\quad \dot{p}_2 = -p_1 $$
+
 ### 2.4
 Montrer que $p^0=0$ est impossible. (On posera par conséquent $p^0=-1$ dans la suite de l'exercice.)
 
-**Réponse.**
+**Réponse.** Si $p^0=0$, on a nécessairement $p_2$ identiquement nul (maximisation du hamiltonien sans contrainte sur $u$) ; or cela implique $p_1 = -\dot{p}_2$ également identiquement nul, \emph{i.e.} $(p_0,p) = (0,0)$, ce qui est interdit.
 
 ### 2.5
 Appliquer la condition de maximisation du PMP.
 
-**Réponse.**
+**Réponse.** $u = \sqrt[3]{p_2/4}$
 
 ### 2.6
 Appliquer les conditions de transversalité.
 
-**Réponse.**
+**Réponse.** $p_2(t_f) = 0$
 
 ### 2.7
 En déduire l'état adjoint.
 
-**Réponse.**
+**Réponse.** Comme $p_2$ est une fonction affine nulle en $t_f$, il existe un réel non nul $a$ tq $p_2(t) = a(t-t_f)$.
 
 ### 2.8
 En déduire le contrôle optimal.
 
-**Réponse.**
+**Réponse.** $u(t) = \sqrt[3]{a(t-t_f)/4}$
 
 ### 2.9
 En déduire finalement la trajectoire optimale $q(t)$, $t \in [0, t_f]$.
 
-**Réponse.**
+**Réponse.** Il existe un réel non nul $b$ tel que $\dot{q}(t) = b[(t-t_f)^(4/3) - t_f^(4/3)]$ et
+$q(t) = b[(3/7)(t-t_f)^(7/3) - t_f^(4/3)(t-t_f)] + 1$ : la condition $q(0)=0$ impose $b = 7/(3t_f^(4/3))$.
 
 ## Exercice 3 (4 points)
 
