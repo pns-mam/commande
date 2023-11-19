@@ -150,8 +150,6 @@ Comment modifier ce code si l'on ne suppose plus le contrôle constant par morce
 
 **Réponse.** Il faut ajouter un vecteur d'inconnues `-1 ≤ u[1:3, 1:P] ≤ 1` et remplacer `u[1]` par `u[1, j]`, *etc.* dans le second membre de la contrainte `θ[1, j+1] = ...`, *etc.* (même chose pour les autres arcs).
 
-```julia 
-
 ### 3.4
 Comment modifier ce code si l'on suppose le courant non plus constant et dirigé selon $(Ox)$ mais de direction quelconque et dépendant de l'état selon une fonction connue $(x,y) \mapsto (w_1(x,y), w_2(x,y)) \in \mathbf{R}^2$ ?
 
