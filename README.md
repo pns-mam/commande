@@ -39,9 +39,9 @@
 
 [TP 3 - MPC](https://github.com/pns-mam/commande/blob/master/tp3/navigation-mpc.ipynb)
 
-TP 4 - Hexapawn 
+[TP 4 - Hexapawn](https://github.com/pns-mam/commande/blob/master/tp4/hexapawn.ipynb)
 
-TP 5 - OpenAI gym: taxi!
+[TP 5 - OpenAI gym: taxi!](https://github.com/pns-mam/commande/blob/master/tp5/q-taxi.ipynb)
 
 # Organisation et intervenants
 
