@@ -129,7 +129,7 @@ En déduire le contrôle optimal.
 En déduire finalement la trajectoire optimale $q(t)$, $t \in [0, t_f]$.
 
 **Réponse.** Il existe un réel non nul $b$ tel que $\dot{q}(t) = b[(t-t_f)^{4/3} - t_f^{4/3}]$ et
-$q(t) = b[(3/7)(t-t_f)^{7/3} - t_f^{4/3}(t-t_f)] + 1$ : la condition $q(0)=0$ impose $b = 7/(3t_f^{4/3})$.
+$q(t) = b[(3/7)(t-t_f)^{7/3} - t_f^{4/3}(t-t_f)] + 1$ : la condition $q(0)=0$ impose $b = 7/(4t_f^{7/3})$.
 
 ## Exercice 3 (4 points)
 
