@@ -103,7 +103,7 @@ $$ \dot{p}_1 = 0,\quad \dot{p}_2 = -p_1 $$
 ### 2.4
 Montrer que $p^0=0$ est impossible. (On posera par conséquent $p^0=-1$ dans la suite de l'exercice.)
 
-**Réponse.** Si $p^0=0$, on a nécessairement $p_2$ identiquement nul (maximisation du hamiltonien sans contrainte sur $u$) ; or cela implique $p_1 = -\dot{p}_2$ également identiquement nul, \emph{i.e.} $(p_0,p) = (0,0)$, ce qui est interdit.
+**Réponse.** Si $p^0=0$, on a nécessairement $p_2$ identiquement nul (maximisation du hamiltonien sans contrainte sur $u$) ; or cela implique $p_1 = -\dot{p}_2$ également identiquement nul, *i.e.* $(p_0,p) = (0,0)$, ce qui est interdit.
 
 ### 2.5
 Appliquer la condition de maximisation du PMP.
@@ -128,8 +128,8 @@ En déduire le contrôle optimal.
 ### 2.9
 En déduire finalement la trajectoire optimale $q(t)$, $t \in [0, t_f]$.
 
-**Réponse.** Il existe un réel non nul $b$ tel que $\dot{q}(t) = b[(t-t_f)^(4/3) - t_f^(4/3)]$ et
-$q(t) = b[(3/7)(t-t_f)^(7/3) - t_f^(4/3)(t-t_f)] + 1$ : la condition $q(0)=0$ impose $b = 7/(3t_f^(4/3))$.
+**Réponse.** Il existe un réel non nul $b$ tel que $\dot{q}(t) = b[(t-t_f)^{4/3} - t_f^{4/3}]$ et
+$q(t) = b[(3/7)(t-t_f)^{7/3} - t_f^(4/3}(t-t_f)] + 1$ : la condition $q(0)=0$ impose $b = 7/(3t_f^{4/3})$.
 
 ## Exercice 3 (4 points)
 
