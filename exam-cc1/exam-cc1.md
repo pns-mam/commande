@@ -143,12 +143,14 @@ Dans le problème de navigation, on applique le contrôle constant $u=-1$ entre 
 ### 3.2
 Dans la portion de code ci-dessous, justifier la présence des termes `τ[1]*Δt`, `τ[2]*Δt`, `τ[3]*Δt` dans la discrétisation de la dynamique.
 
-**Réponse.** Les produits par les `τ[i]` viennent du changement de variable (similitude) qui ramène chacun des trois arcs sur $[0,1]$.
+**Réponse.** Les produits par les `τ[i]` viennent des changements de variable (similitude) qui ramène chacun des trois arcs sur $[0,1]$.
 
 ### 3.3
 Comment modifier ce code si l'on ne suppose plus le contrôle constant par morceaux sur $[\tau_1,\tau_1+\tau_2]$ ?
 
-**Réponse.** Il faut ajouter un vecteur d'inconnues `-1 ≤ u[1:3, 1:P] ≤ 1` et remplacer `u[1]` par `u[1, j]`, *etc.* dans les contraintes sur la dynamique de $\dot{\theta}$.
+**Réponse.** Il faut ajouter un vecteur d'inconnues `-1 ≤ u[1:3, 1:P] ≤ 1` et remplacer `u[1]` par `u[1, j]`, *etc.* dans le second membre de la contrainte `θ[1, j+1] = ...`, *etc.* (même chose pour les autres arcs).
+
+```julia 
 
 ### 3.4
 Comment modifier ce code si l'on suppose le courant non plus constant et dirigé selon $(Ox)$ mais de direction quelconque et dépendant de l'état selon une fonction connue $(x,y) \mapsto (w_1(x,y), w_2(x,y)) \in \mathbf{R}^2$ ?
