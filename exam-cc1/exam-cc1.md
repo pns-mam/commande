@@ -143,7 +143,7 @@ Dans le problème de navigation, on applique le contrôle constant $u=-1$ entre 
 ### 3.2
 Dans la portion de code ci-dessous, justifier la présence des termes `τ[1]*Δt`, `τ[2]*Δt`, `τ[3]*Δt` dans la discrétisation de la dynamique.
 
-**Réponse.** Les produits par les `τ[i]` viennent des changements de variable (similitude) qui ramène chacun des trois arcs sur $[0,1]$.
+**Réponse.** Les produits par les `τ[i]` viennent des changements de variable (similitude) qui ramènent chacun des trois arcs sur $[0,1]$.
 
 ### 3.3
 Comment modifier ce code si l'on ne suppose plus le contrôle constant par morceaux sur $[\tau_1,\tau_1+\tau_2]$ ?
