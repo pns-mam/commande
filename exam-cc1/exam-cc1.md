@@ -138,7 +138,7 @@ $q(t) = b[(3/7)(t-t_f)^{7/3} - t_f^{4/3}(t-t_f)] + 1$ : la condition $q(0)=0$ im
 ### 3.1
 Dans le problème de navigation, on applique le contrôle constant $u=-1$ entre $t$ et $t+2\pi$. Déterminer $x(t+2\pi)-x(t)$, $y(t+2\pi)-y(t)$ et $\theta(t+2\pi)-\theta(t)$.
 
-**Réponse.** $x(t+2\pi)-x(t) =-2\pi w$, $y(t+2\pi)-y(t) = 0$ et $\theta(t+2\pi)-\theta(t) = -2\pi$.
+**Réponse.** $x(t+2\pi)-x(t) = 2\pi w$, $y(t+2\pi)-y(t) = 0$ et $\theta(t+2\pi)-\theta(t) = -2\pi$.
 
 ### 3.2
 Dans la portion de code ci-dessous, justifier la présence des termes `τ[1]*Δt`, `τ[2]*Δt`, `τ[3]*Δt` dans la discrétisation de la dynamique.
