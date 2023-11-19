@@ -58,14 +58,16 @@ En déduire le contrôle optimal.
 ### 1.8
 Déterminer le temps minimal en fonction des conditions initiales $(q_0,\dot{q}_0)$.
 
-**Réponse.** La trajectoire est donc l'unique arc de parabole passant par $(q_0,\dot{q}_0)$ et intersectant la cible $\dot{q}=0$ (axe horizontal). On en déduit l'unicité de solution (l'existence étant admise) et la valeur du temps minimum en fonction des conditions initiales (fonction valeur du problème) :
+**Réponse.** La trajectoire est donc l'unique arc de parabole passant par $(q_0,\dot{q}_0)$ et intersectant la cible $\dot{q}=0$ (axe horizontal). On en déduit l'unicité de solution (l'existence étant admise) et la valeur du temps minimum en fonction des conditions initiales (fonction valeur du problème) en écrivant $\dot{q}(t) = u(t)+\dot{q}_0$ avec $u(t)=-\text{sgn}(\dot{q}_0)$ (le seul moyen d'atteindre la cible $\dot{q}(t_f) = 0$, équation qui donne $t_f$) : 
 
-$$ t_f(q_0,\dot{q}_0) = XXX . $$
+$$ t_f(q_0,\dot{q}_0) = |\dot{q}_0|. $$
 
 ### 1.9
 Dessiner la synthèse dans le plan $(q,\dot{q})$.
 
 **Réponse.**
+
+![](fig1.jpg)
 
 ## Exercice 2 (8 points)
 
