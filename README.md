@@ -30,6 +30,8 @@
 
 [CM 8](https://github.com/pns-mam/commande/blob/master/cm/cm8.pdf)
 
+[CM 9](https://github.com/pns-mam/commande/blob/master/cm/cm9.pdf)
+
 [TP 1 - Navigation](https://github.com/pns-mam/commande/blob/master/tp1/navigation.ipynb)
 [(solution)](https://github.com/pns-mam/commande/blob/master/tp1/navigation-sol.ipynb)
 [(solution à 3 arcs)](https://github.com/pns-mam/commande/blob/master/tp1/navigation-bsb.ipynb)
