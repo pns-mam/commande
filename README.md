@@ -40,10 +40,13 @@
 [(solution)](https://github.com/pns-mam/commande/blob/master/tp2/tp2-sol.ipynb)
 
 [TP 3 - MPC](https://github.com/pns-mam/commande/blob/master/tp3/navigation-mpc.ipynb)
+([solution](https://github.com/pns-mam/commande/blob/master/tp3/navigation-mpc-sol.ipynb))
 
 [TP 4 - Hexapawn](https://github.com/pns-mam/commande/blob/master/tp4/hexapawn.ipynb)
+([solution](https://github.com/pns-mam/commande/blob/master/tp4/hexapawn-sol.ipynb))
 
 [TP 5 - OpenAI gym: taxi!](https://github.com/pns-mam/commande/blob/master/tp5/q-taxi.ipynb)
+([solution](https://github.com/pns-mam/commande/blob/master/tp5/q-taxi-sol.ipynb))
 
 # Organisation et intervenants
 
