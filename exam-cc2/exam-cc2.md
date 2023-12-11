@@ -2,8 +2,7 @@
 ## MAM5-INUM - Commande optimale
 # Exam CC no. 2
 
-**Durée 2H00. Tous les exercices sont indépendants.
-Le barème prévisionnel est indiqué pour chaque exercice.**
+**Durée 2H00. Documents autorisés. Tous les exercices sont indépendants. Le barème prévisionnel est indiqué pour chaque exercice.**
 
 ## Exercice 1 (12 points)
 On considère le problème de Lagrange suivant, à temps final $t_f$ fixé,

@@ -5,7 +5,7 @@
 
 # Exam CC no. 1
 
-**Durée 2H. Documents autorisés.**
+**Durée 2H00. Documents autorisés. Tous les exercices sont indépendants. Le barème prévisionnel est indiqué pour chaque exercice.**
 
 ## Exercice 1 (8 points)
 Soit à résoudre le problème de temps minimum avec pour dynamique
