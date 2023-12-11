@@ -40,7 +40,7 @@ $\rhd$ $p_2(t) = -p_1 + Be^{-t}$ où $p_1$ et $B$ sont des constantes à déterm
 ### 1.6
 Montrer que, si la fonction $p_2$ est constante, elle n'est pas nulle.
 
-$\rhd$ Si $p_2 \equiv 0$, nécessairement $p_1=0$ ; comme (temps final libre), $0 = H = p_0$, on aurait alors $(p^0,p) = (0,0)$, ce qui est impossible.
+$\rhd$ Si $p_2 \equiv 0$, nécessairement $p_1=0$ ; comme (temps final libre), $0 = H = p^0$, on aurait alors $(p^0,p) = (0,0)$, ce qui est impossible.
 
 ### 1.7
 En déduire que le contrôle vaut $+1$ ou $-1$, avec au plus une commutation.
