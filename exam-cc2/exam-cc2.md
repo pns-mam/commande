@@ -10,7 +10,7 @@ On considère le problème de Lagrange suivant, à temps final $t_f$ fixé,
 
 $$ \dot{x}(t) = ax(t)u(t)-bx(t),\quad t \in [0,t_f], $$
 
-$$ \int_0^{t_f} (u(t)-1)x(t)\,\mathrm{d}t \to \min, $$
+$$ \int_0^{t_f} (u(t)-1)x(t)\ \mathrm{d}t \to \min, $$
 
 où $a$ et $b$ sont des réels strictement positifs, avec $a > b$, et où $x(0)=x_0 > 0$ est fixé alors que $x(t_f)$ est laissé libre. On a la contrainte que, presque pour tout $t$,
 
