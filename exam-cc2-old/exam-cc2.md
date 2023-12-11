@@ -60,7 +60,7 @@ $\rhd$ $x_1 = x_2 + \ln(1-x_2)$, $x_2 \leq 0$
 ### 1.10
 Donner l'allure de la synthèse dans le plan $(x_1,x_2)$. (Dessiner approximativement les trajectoires temps minimales partant de $(0,0)$ vers une cible arbitraire.)
 
-$\rhd$ ![synthèse](fig1.jpg)
+$\rhd$ ![synthèse](https://github.com/pns-mam/commande/edit/master/exam-cc2-old/fig1.jpg)
 
 ## Exercice 2 (8 points)
 
