@@ -28,6 +28,7 @@ $$ u(t) \in [0,1]. $$
 Montrer qu'on est dans le cas normal. (On prendra par conséquent $p^0=-1$ dans la suite.)
 
 ### 1.5
+On fait désormais l'hypothèse que l'état $x$ est strictement positif sur $[0,t_f]$.
 Appliquer la condition de maximisation du Hamiltonien. 
 
 ### 1.6
