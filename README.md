@@ -14,6 +14,8 @@
 5. Model predictive control
 6. Reinforcement learning
 
+[CM 1](cm/cm1.pdf)
+
 TP 1 - Navigation
 
 TP 2 - Tir simple
