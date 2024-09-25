@@ -17,7 +17,6 @@ The turning rate (= curvature of turns) is limited, so $|u(t)| \leq 1$. There bo
 
 ```julia
 #JuMP model, Ipopt solver
-using Pkg; Pkg.activate(".")
 using JuMP, Ipopt, Plots
 
 sys = Model(optimizer_with_attributes(Ipopt.Optimizer,"print_level"=> 5))
