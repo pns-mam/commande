@@ -16,7 +16,7 @@
 
 [CM 1](cm/cm1.pdf)
 
-TP 1 - Navigation
+[TP 1 - Navigation](tp1/tp1.md)
 
 TP 2 - Tir simple
 
