@@ -18,7 +18,10 @@
 
 [CM 2](cm/cm2.pdf)
 
+[CM 3](cm/cm3.pdf)
+
 [TP 1 - Navigation](tp1/tp1.md)
+([solution](tp1/tp1-sol.md))
 
 TP 2 - Tir simple
 
