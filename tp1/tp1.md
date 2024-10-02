@@ -97,5 +97,4 @@ for i = 1 : 5 : P
     plot!([z[1]],[z[2]],seriestype = :scatter, color =:red , legend = false) 
     plot!(size=(600,600))
 end
-current()
 ```
