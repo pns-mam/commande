@@ -21,8 +21,8 @@
 [CM 3](cm/cm3.pdf)
 
 [TP 1 - Navigation](tp1/tp1.md)
-([solution](tp1/tp1-sol.md)
- [solution 3 arcs](tp1/tp1-sol-3arcs.md))
+([solution](tp1/tp1-sol.md))
+([solution 3 arcs](tp1/tp1-sol-3arcs.md))
 
 TP 2 - Tir simple
 
