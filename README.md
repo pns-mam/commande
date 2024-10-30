@@ -30,7 +30,7 @@
 ([solution](tp1/tp1-sol.md))
 ([solution 3 arcs](tp1/tp1-sol-3arcs.md))
 
-TP 2 - Tir simple
+[TP 2 - Tir simple](tp2/tp2.md)
 
 TP 3 - MPC
 
