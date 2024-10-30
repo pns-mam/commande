@@ -20,6 +20,12 @@
 
 [CM 3](cm/cm3.pdf)
 
+[CM 4](cm/cm4.pdf)
+
+[CM 5](cm/cm5.pdf)
+
+[CM 6](cm/cm6.pdf)
+
 [TP 1 - Navigation](tp1/tp1.md)
 ([solution](tp1/tp1-sol.md))
 ([solution 3 arcs](tp1/tp1-sol-3arcs.md))
