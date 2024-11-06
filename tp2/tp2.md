@@ -14,7 +14,7 @@ $$ \dot{x}(t) = -x(t)+u(t),\quad u(t) \in \mathbf{R},\quad t \in [0,1],\quad
 Résoudre le problème numériquement à l'aide d'une méthode de tir.
 
 ```julia
-using OptimalControl, MINPACK, Plots
+using OptimalControl, OrdinaryDiffEq, MINPACK, Plots
 
 t0 = 0.0
 tf = 1.0
