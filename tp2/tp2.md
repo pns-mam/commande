@@ -25,7 +25,7 @@ xf_fixed = 0.0 # target
 h(x, p) = 0.0 # TO BE UPDATED
 
 # Makes flow from Hamiltonian
-f = Flow(h)
+f = Flow(h) # (xf, pf) = f(t0, x0, p0, tf)
 
 # Shooting function
 function shoot!(s, p0)
