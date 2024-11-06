@@ -4,7 +4,7 @@
 
 On considère le problème de contrôle optimal suivant :
 
-$$ \frac{1}{2} \int_0^1 |u(t)|^2\,\mathrm{d}t \to \min $$
+$$ \frac{1}{2} \int_0^1 |u(t)|^2\ \mathrm{d}t \to \min $$
 
 sous les contraintes
 
