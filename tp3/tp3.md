@@ -12,7 +12,7 @@ $$ \begin{array}{rcl}
 
 The turning rate (= curvature of turns) is limited, so $|u(t)| \leq 1$. There boundary conditions at $t=0$ and $t=t_f$ on the position $(x,y)$ and on the angle $\theta$ of the velocity in the water referential. The final time is to be minimised. The problem originates from a collaboration with the French company [CGG](https://www.cgg.com) that is interested in optimal maneuvers for very large ships doing marine prospection.
 
-![ship](ship.png)
+![ship](ship.jpg)
 
 ## Problem definition
 
