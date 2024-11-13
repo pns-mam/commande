@@ -75,8 +75,11 @@ function trajectory(tspan, x0, y0, θ0, us, ts, drift; abstol=1e-12, reltol=1e-1
     return sol
     
 end
+```
 
-# Main loop
+## Main loop
+
+```julia
 Nmax = 20      # max number iterations
 ε = 1e-1       # final condition threshold
 Δt = 1.0       # fixed time step for MPC
@@ -128,15 +131,17 @@ while true
     N = N+1
     
 end
+```
 
-# Plots: states and control
+## Plots: states, control and trajectory
+
+```julia
 x_plot = plot(t, x, xlabel="t", ylabel="position x", legend=false, fmt=:png)
 y_plot = plot(t, y, xlabel="t", ylabel="position y", legend= false, fmt=:png)
 θ_plot = plot(t, θ, xlabel="t", ylabel="θ", legend=false, fmt=:png)
 u_plot = plot(t, u, xlabel="t", ylabel="control", legend=false, fmt=:png)
 display(plot(x_plot, y_plot, θ_plot, u_plot, layout = (2,2)))
 
-# Plots: trajectory 
 traj_plot = plot(x, y, color=:black, lw=3)
 plot!(size=(600,600))
 
