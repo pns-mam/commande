@@ -4,28 +4,28 @@
 
 On considère le problème de contrôle optimal suivant :
 
-$$ \frac{1}{2} \int_0^1 |u(t)|^2\,\mathrm{d}t \to \min $$
+$$ \frac{1}{2} \int_0^1 |u(t)|^2\ \mathrm{d}t \to \min $$
 
 sous les contraintes
 
-$$ \dot{x}(t) = -x(t)+u(t),\quad u(t) \in \mathbf{R},\quad t \in [0,1],\\
+$$ \dot{x}(t) = -x(t)+u(t),\quad u(t) \in \mathbf{R},\quad t \in [0,1],\quad
    x(0)=-1,\quad x(1)=0. $$
 
 Résoudre le problème numériquement à l'aide d'une méthode de tir.
 
 ```julia
-using OptimalControl, MINPACK, Plots
+using OptimalControl, OrdinaryDiffEq, MINPACK, Plots
 
 t0 = 0.0
 tf = 1.0
 x0 = -1.0
 xf_fixed = 0.0 # target
 
-# Hamiltonian
+# Maximised Hamiltonian
 h(x, p) = 0.0 # TO BE UPDATED
 
 # Makes flow from Hamiltonian
-f = Flow(h)
+f = Flow(h) # (xf, pf) = f(t0, x0, p0, tf)
 
 # Shooting function
 function shoot!(s, p0)

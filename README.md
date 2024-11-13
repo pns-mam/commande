@@ -26,6 +26,8 @@
 
 [CM 6](cm/cm6.pdf)
 
+[CM 7](cm/cm7.pdf)
+
 [TP 1 - Navigation](tp1/tp1.md)
 ([solution](tp1/tp1-sol.md))
 ([solution 3 arcs](tp1/tp1-sol-3arcs.md))
@@ -60,7 +62,7 @@ TP 5 - OpenAI gym: taxi!
 
 [Ekeland I. Mathematics in the social sciences. Torino lectures, 2022](https://www.ceremade.dauphine.fr/~ekeland/lectures/Torino.pdf)
 
-[Evans, L. C. *An introduction to mathematical optimal control theory.* Univ. California, 2008](refs/evans-control-2008a.pdf)
+[Evans, L. C. *An introduction to mathematical optimal control theory.* Univ. California, 2008](https://math.berkeley.edu/~evans/control.course.pdf)
 
 Fleming, W. H. ; Rishel, *R. W. Deterministic and stochastic optimal control.* Springer, 1975
 
