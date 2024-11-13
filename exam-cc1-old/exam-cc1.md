@@ -105,7 +105,7 @@ $$ \dot{p}_1 = 0,\quad \dot{p}_2 = -p_1 $$
 ### 2.4
 Montrer que $p^0=0$ est impossible. (On posera par conséquent $p^0=-1$ dans la suite de l'exercice.)
 
-**Réponse.** Si $p^0=0$, on a nécessairement $p_2$ identiquement nul (maximisation du hamiltonien sans contrainte sur $u$) ; or cela implique $p_1 = -\dot{p}_2$ également identiquement nul, *i.e.* $(p_0,p) = (0,0)$, ce qui est interdit.
+**Réponse.** Si $p^0=0$, on a nécessairement $p_2$ identiquement nul (maximisation du hamiltonien sans contrainte sur $u$) ; or cela implique $p_1 = -\dot{p}_2$ également identiquement nul, *i.e.* $(p^0,p) = (0,0)$, ce qui est interdit.
 
 ### 2.5
 Appliquer la condition de maximisation du PMP.
