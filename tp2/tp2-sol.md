@@ -25,7 +25,7 @@ xf_fixed = 0.0 # target
 h(x, p) = -p^2 / 2 + p * (-x + p) # TO BE UPDATED
 
 # Makes flow from Hamiltonian
-f = Flow(h)
+f = Flow(Hamiltonian(h))
 
 # Shooting function
 function shoot!(s, p0)
