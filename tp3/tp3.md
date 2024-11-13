@@ -14,10 +14,11 @@ The turning rate (= curvature of turns) is limited, so $|u(t)| \leq 1$. There bo
 
 ![ship](ship.png)
 
+## Problem definition
+
 ```julia
 using JuMP, Ipopt, Plots, OrdinaryDiffEq, LinearAlgebra
 
-# Problem definition
 t0 = 0.
 x0 = 0. 
 y0 = 0.
@@ -36,8 +37,11 @@ function drift(x, y) # current as a function of position
     end
     return w
 end
+```
 
-# Solver (JuMP)
+## Solver (JuMP)
+
+```julia
 function solve(x0, y0, θ0, xf, yf, θf, w, P=50; tol=1e-8, max_iter=500, print_level=5)
     
     sys = Model(optimizer_with_attributes(Ipopt.Optimizer,"print_level"=>print_level))
@@ -51,8 +55,11 @@ function solve(x0, y0, θ0, xf, yf, θf, w, P=50; tol=1e-8, max_iter=500, print_
     return us, τs
     
 end
+```
 
-# Simulation of the real system
+## Simulation of the real system
+
+```julia
 function trajectory(tspan, x0, y0, θ0, us, ts, drift; abstol=1e-12, reltol=1e-12, saveat=[])
     
     function rhs!(dX, X, dummy, t)
