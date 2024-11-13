@@ -28,11 +28,14 @@
 
 [CM 7](cm/cm7.pdf)
 
+[CM 8](cm/cm8.pdf)
+
 [TP 1 - Navigation](tp1/tp1.md)
 ([solution](tp1/tp1-sol.md))
 ([solution 3 arcs](tp1/tp1-sol-3arcs.md))
 
 [TP 2 - Tir simple](tp2/tp2.md)
+([solution](tp2/tp2-sol.md))
 
 [TP 3 - MPC](tp3/tp3.md)
 
