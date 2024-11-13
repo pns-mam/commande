@@ -34,7 +34,7 @@
 
 [TP 2 - Tir simple](tp2/tp2.md)
 
-TP 3 - MPC
+[TP 3 - MPC](tp3/tp3.md)
 
 TP 4 - Hexapawn
 
