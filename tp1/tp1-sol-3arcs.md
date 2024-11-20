@@ -40,8 +40,8 @@ P = 100
     x[1:3, 1:P]           # x 
     y[1:3, 1:P]           # y 
     θ[1:3, 1:P]           # theta
-    -1 ≤ u[1:3] ≤ 1       # u1 à u3, piecewise constant control
-     0 ≤ τ[1:3]           # tau1 à tau3, length of subintervals
+    -1 ≤ u[1:3] ≤ 1       # u1 to u3, piecewise constant control
+     0 ≤ τ[1:3]           # tau1 to tau3, length of subintervals
     end)
 
 # Objective
