@@ -32,6 +32,8 @@
 
 [CM 9](cm/cm9.pdf)
 
+[CM 10](cm/cm10.pdf)
+
 [TP 1 - Navigation](tp1/tp1.md)
 ([solution](tp1/tp1-sol.md))
 ([solution 3 arcs](tp1/tp1-sol-3arcs.md))
