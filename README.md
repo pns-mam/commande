@@ -41,9 +41,9 @@
 
 [TP 3 - MPC](tp3/tp3.md)
 
-TP 4 - Hexapawn
+[TP 4 - Hexapawn](tp4/hexapawn.ipynb)
 
-TP 5 - OpenAI gym: taxi!
+[TP 5 - OpenAI gym: taxi!](tp5/q-taxi-sol.ipynb)
 
 # Organisation et intervenants
 

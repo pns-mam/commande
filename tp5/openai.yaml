@@ -1,0 +1,6 @@
+name: openai
+channels:
+  - conda-forge
+dependencies:
+  - gym=0.21.0
+  - ipykernel
