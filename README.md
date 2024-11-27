@@ -40,6 +40,7 @@
 ([solution](tp2/tp2-sol.md))
 
 [TP 3 - MPC](tp3/tp3.md)
+([solution](tp3/tp3-sol.md))
 
 [TP 4 - Hexapawn](tp4/hexapawn.ipynb)
 
@@ -67,7 +68,7 @@
 
 [Ekeland I. Mathematics in the social sciences. Torino lectures, 2022](https://www.ceremade.dauphine.fr/~ekeland/lectures/Torino.pdf)
 
-[Evans, L. C. *An introduction to mathematical optimal control theory.* Univ. California, 2008](https://math.berkeley.edu/~evans/control.course.pdf)
+[Evans, L. C. *An introduction to mathematical optimal control theory.* Univ. California, 2024](https://math.berkeley.edu/~evans/control.course.pdf)
 
 Fleming, W. H. ; Rishel, *R. W. Deterministic and stochastic optimal control.* Springer, 1975
 
