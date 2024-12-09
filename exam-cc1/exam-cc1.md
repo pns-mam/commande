@@ -123,7 +123,7 @@ d'o\`u la constance de $p_x$ et $p_y$.
 
 Appliquer la condition de maximisation pour déterminer les contrôles optimaux.
 
-**Réponse.** On a presque partout $u(t) = \sgn(p_\theta(t))$ si $p_\theta(t) \neq 0$.
+**Réponse.** On a presque partout $u(t) = \text{sgn}(p_\theta(t))$ si $p_\theta(t) \neq 0$.
 
 ### 2.5
 
@@ -131,7 +131,7 @@ En déduire que, le long d'une extrémale optimale, on a
 
 $$ 0 = p^0 + p_x w + p_x\cos\theta(t) + p_y\sin\theta(t) + |p_\theta(t)|,\quad t \in [0,t_f]. $$ 
 
-**Réponse.** Comme on est en temps min, $H=0$ le long d'une extr\'emale et, par maximisation, $p_\theta(t)u(t) = |p_\theta(t)|$.
+**Réponse.** Comme on est en temps min, $H=0$ le long d'une extrémale et, par maximisation, $p_\theta(t)u(t) = |p_\theta(t)|$.
 
 ### 2.6
 
