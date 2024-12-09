@@ -152,7 +152,7 @@ ensemble que l'on dessinera pour $\gamma > 1$.
 tronqués selon la position des centres) de rayon $1$ et de centres $\pm \gamma$.
 Quand $\gamma > 1$, les deux cercles sont disjoints, chacun dans un demi-plan.
 
-![Fig1](2circles.jpg)
+![Fig1](2cercles.jpg)
 
 ### 2.8
 
