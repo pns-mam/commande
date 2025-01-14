@@ -12,7 +12,7 @@ $$ \dot{x}(t) = \cos u(t) + c(y(t)),\quad \dot{y}(t) = \sin u(t)), $$
 
 avec $(x,y) \in \mathbf{R}^2$ les coordonnées dans le canal (voir figure ci-après) et $u \in \mathbf{R}$. Dans tout l'exercice on prend une condition initiale à l'origine, $(x(0),y(0)) = (0,0)$, le temps final $t_f$ est supposé *libre*, et on admettra que tous les problèmes considérés possèdent une solution.
 
-![IMG_3915](https://hackmd.io/_uploads/Hy42wyVv1g.jpg)
+![IMG_3915](fig1.jpg)
 
 **Partie A.** On s'intéresse pour commencer à minimiser le déport $x(t_f)$ quand on vise la berge opposée, $y(t_f) = 1$.
 
