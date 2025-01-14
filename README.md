@@ -62,6 +62,8 @@
 
 [Exam CC no. 1](exam-cc1/exam-cc1.md)
 
+[Exam CC no. 2](exam-cc2/exam-cc2.md)
+
 [Exam CC no. 1 (2023-24)](exam-cc1-old/exam-cc1.md)
 
 [Exam CC no. 2 (2023-24)](exam-cc2-old/exam-cc2.md)
