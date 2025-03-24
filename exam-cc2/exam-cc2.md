@@ -8,7 +8,7 @@
 
 On considère une barque se déplaçant à vitesse constante dans un canal rectiligne, de largeur constante. On peut supposer que la norme de la vitesse vaut un, et normaliser de même la largeur du canal à un. Il y a dans ce canal un courant $c(y)$ dirigé selon $(Ox)$ que l'on suppose *fort* (avec $c$ une fonction $\mathscr{C}^\infty$), c'est à dire tel que $c(y) > 1$, quel que soit $y$. On contrôle directement le cap du bateau, noté $u(t)$, de sorte que le système s'écrit
 
-$$ \dot{x}(t) = \cos u(t) + c(y(t)),\quad \dot{y}(t) = \sin u(t)), $$
+$$ \dot{x}(t) = \cos u(t) + c(y(t)),\quad \dot{y}(t) = \sin u(t), $$
 
 avec $(x,y) \in \mathbf{R}^2$ les coordonnées dans le canal (voir figure ci-après) et $u \in \mathbf{R}$. Dans tout l'exercice on prend une condition initiale à l'origine, $(x(0),y(0)) = (0,0)$, le temps final $t_f$ est supposé *libre*, et on admettra que tous les problèmes considérés possèdent une solution.
 
