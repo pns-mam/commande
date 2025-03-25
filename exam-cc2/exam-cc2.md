@@ -108,7 +108,7 @@ Déterminer le temps minimal.
 
 Dans le cas normal, donner l'expression de $u$ en fonction des adjoints.
 
-**Réponse.** Par maximisation du même $H$ qu'au B (cette fois avec $p_x$ constant mais nécessairement nul), on a $u = \text{arg}(p)$. Si $p^0 = -1$ (cas normal), $0 = H = -1 + |p| + p_x c(y)$, d'où $\cos u = p_x / |p| = p_x / (1 - p_x c(y))$.
+**Réponse.** Par maximisation du même $H$ qu'au B (cette fois avec $p_x$ constant mais non nécessairement nul), on a $u = \text{arg}(p)$. Si $p^0 = -1$ (cas normal), $0 = H = -1 + |p| + p_x c(y)$, d'où $\cos u = p_x / |p| = p_x / (1 - p_x c(y))$.
 
 ### 1.15
 
