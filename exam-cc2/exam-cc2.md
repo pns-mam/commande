@@ -127,7 +127,7 @@ $$ x_1(t_f) x_2(t_f) = 1. $$
 
 Donner la condition de transversalité correspondante.
 
-**Réponse.** L'application $h(x) = x_1 x_2 - 1$ est une submersion sur $\lbrace h = 0 \rbrace$, et la condition est $p(t_f)$ colinéaire à $\nabla h(x(t_f))$, soit $p_1(t_f) x_1(t_f) - p_2(t_f) x_2(t_f) = 0$.
+**Réponse.** L'application $h(x) = x_1 x_2 - 1$ est une submersion sur $\lbrace h = 0 \rbrace$ puisque $h'(x) = [x_2\ x_1]$ est non nul sur cet ensemble, et la condition est $p(t_f)$ colinéaire à $\nabla h(x(t_f))$, soit $p_1(t_f) x_1(t_f) - p_2(t_f) x_2(t_f) = 0$.
 
 ### 2.2
 
