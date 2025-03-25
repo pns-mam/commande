@@ -115,7 +115,7 @@ Dans le cas normal, donner l'expression de $u$ en fonction des adjoints.
 Dans le cas anormal, donner l'expression de $u$ : comment interpréter cette solution ?
 
 **Réponse.** Avec $0 = H = |p| + p_x c(y)$, on est ramené au cas
-$\cos u = p_x / |p| = -1 / c(y))$ , comme au A.
+$\cos u = p_x / |p| = -1 / c(y)$ , comme au A.
 
 ## Exercice 2 (5 points)
 
