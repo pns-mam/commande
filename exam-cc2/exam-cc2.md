@@ -88,7 +88,7 @@ Montrer qu'on est nécessairement dans le cas normal. (On posera donc $p^0 = -1$
 
 Montrer que $p_y$ ne s'annule pas.
 
-**Réponse.** Le système adjoint est linéaire en $p = (p_x, p_y)$, donc si $p_y$ s'annulait en un point, $p$ serait identiquement nul, et on aurait aussi $p^0 = 0$  puisque $H = 0$ : impossible.
+**Réponse.** Le système adjoint est linéaire en $p = (p_x, p_y)$, donc si $p_y$ s'annulait en un point, $p$ serait identiquement nul, et on aurait aussi $p^0 = 0$  puisque $H = 0$ : impossible. Donc $p_y$ est constant $(\dot{p}_y = 0)$ et non nul.
 
 ### 1.12
 
