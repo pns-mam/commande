@@ -5,14 +5,7 @@
 
 [Discussion](https://github.com/pns-mam/commande/discussions/1)
 
-# Plan du cours
-
-1. Introduction
-2. Méthodes directes
-3. Principe du maximum de Pontrjagin
-4. Méthode de tir
-5. Model predictive control
-6. Reinforcement learning
+[Plan du cours](cm/cm.md)
 
 [TP 1 - Navigation](tp1/tp1.md)
 
