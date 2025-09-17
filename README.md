@@ -52,6 +52,8 @@ Fleming, W. H. ; Rishel, *R. W. Deterministic and stochastic optimal control.* S
 
 Gardner, M. *The unexpected hanging and other mathematical diversions.* University of Chicago Press, 1991
 
+[OptimalControl.jl](https://control-toolbox.org/OptimalControl.jl)
+
 [Recht, B. A tour of reinforcement learning : the view from continuous control. arXiv :1806.09460, 2018](https://arxiv.org/pdf/1806.09460.pdf)
 
 [Sutton, R. S. ; Barto, A. G. Reinforcement learning : an introduction, MIT press, 2015](http://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf)
