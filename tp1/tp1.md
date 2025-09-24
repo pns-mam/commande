@@ -31,39 +31,39 @@ y0 = 0
 xf = 4
 yf = 7
 θf =-π/2 
-P = 100
+N = 100
 
 # Bounds for variables
 
 @variables(sys,begin
-    x[1:P]           # x 
-    y[1:P]           # y 
-    θ[1:P]           # theta
-    -1 ≤ u[1:P] ≤ 1  # u, control
-     0 ≤ Δt ≤ 1 
+    x[1:N]         
+    y[1:N]         
+    θ[1:N]         
+    -1 ≤ u[1:N-1] ≤ 1
+    0 ≤ Δt ≤ 1 
     end)
 
 # Objective
-@objective(sys,Min,Δt)
+@objective(sys, Min, Δt)
 
 # Constraints 
-@constraints(sys,begin
+@constraints(sys, begin
     x[1] == x0
     y[1] == y0
     θ[1] == θ0
-    x[P] == xf
-    y[P] == yf
-    θ[P] == θf
+    x[N] == xf
+    y[N] == yf
+    θ[N] == θf
     end)
 
-# Dynamics: Crank-Nicolson scheme
-for j in 1 : P-1
+# Dynamics: Euler scheme
+for j in 1:N-1
     @NLconstraint(sys, # x' = w + cos(theta)
-        x[j+1] == x[j] + Δt * ( w + cos(θ[j]) ) )
+        x[j+1] == x[j] + Δt * (w + cos(θ[j])))
     @NLconstraint(sys, # y' = sin(theta) 
-        y[j+1] == y[j] + Δt * sin(θ[j]) )
+        y[j+1] == y[j] + Δt * sin(θ[j]))
     @NLconstraint(sys, # theta' = u 
-        θ[j+1] == θ[j] + Δt * u[j] )
+        θ[j+1] == θ[j] + Δt * u[j])
 end
 ```
 
@@ -77,24 +77,24 @@ y1 = value.(y)
 θ1 = value.(θ)
 u1 = value.(u)
 println("Cost : " , objective_value(sys))
-println("tf = ", value.(Δt)*P)
+println("tf = ", value.(Δt) * N)
 
 # Plots: states 
 Δt1 = value.(Δt)
-t = (1 : P)*Δt1
-x_plot = plot(t,x1,xlabel = "t", ylabel = "position x", legend = false, fmt = :png)
-y_plot = plot(t,y1,xlabel = "t", ylabel = "position y", legend = false, fmt = :png)
-θ_plot = plot(t,θ1,xlabel = "t", ylabel = "θ", legend = false, fmt = :png)
-u_plot = plot(t,u1,xlabel = "t", ylabel = "control", legend = false, fmt = :png)
-display(plot(x_plot,y_plot,θ_plot,u_plot, layout = (2,2)))
+t = (1:N) * Δt1
+x_plot = plot(t, x1; xlabel="t", ylabel="position x", legend=false, fmt=:png)
+y_plot = plot(t, y1; xlabel="t", ylabel="position y", legend=false, fmt=:png)
+θ_plot = plot(t, θ1; xlabel="t", ylabel="θ", legend=false, fmt=:png)
+u_plot = plot(t, u1; xlabel="t", ylabel="control", legend=false, fmt=:png)
+display(plot(x_plot, y_plot, θ_plot, u_plot; layout=(2,2)))
 
 # Plots: trajectory 
-traj_plot = plot(x1,y1, c = :black, lw = 3)
+traj_plot = plot(x1, y1; c=:black, lw=3)
 plot!(size=(600,600))
 
-for i = 1 : 5 : P 
+for i = 1:5:N 
     z = [x1[i] y1[i]]
-    plot!([z[1]],[z[2]],seriestype = :scatter, color =:red , legend = false) 
+    plot!([z[1]], [z[2]], seriestype = :scatter, color =:red , legend = false) 
     plot!(size=(600,600))
 end
 current()
