@@ -81,7 +81,7 @@ println("tf = ", value.(Δt) * N)
 
 # Plots: states 
 Δt1 = value.(Δt)
-t = (0:N + 1) * Δt1
+t = (0:N) * Δt1
 x_plot = plot(t, x1; xlabel="t", ylabel="position x", legend=false, fmt=:png)
 y_plot = plot(t, y1; xlabel="t", ylabel="position y", legend=false, fmt=:png)
 θ_plot = plot(t, θ1; xlabel="t", ylabel="θ", legend=false, fmt=:png)
