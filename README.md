@@ -53,4 +53,4 @@ Gardner, M. *The unexpected hanging and other mathematical diversions.* Universi
 
 [Sutton, R. S. ; Barto, A. G. Reinforcement learning : an introduction, MIT press, 2015](http://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf)
 
-[Trélat, E. Contrôle optimal, théorie et applications. Vuibert, 2005](https://www.ljll.math.upmc.fr/trelat/fichiers/livreopt2.pdf)
+[Trélat, E. Contrôle optimal, théorie et applications. Vuibert, 2005](https://www.ljll.fr/trelat/fichiers/livreBFT.pdf)
