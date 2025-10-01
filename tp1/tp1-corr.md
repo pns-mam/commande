@@ -49,9 +49,5 @@ ocp = @def begin
 println("Solving...")
 N = 100
 sol = solve(ocp; grid_size=N) 
-tf = variable(sol)
-X = state(sol)
-u = control(sol)
-t = time_grid(sol)
-println("tf = ", tf)
+plot(sol)
 ```
