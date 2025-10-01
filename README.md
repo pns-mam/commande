@@ -10,6 +10,7 @@
 [CM 1](cm/cm1.pdf)
 
 [TP 1 - Navigation](tp1/tp1.md)
+([solution](tp1/tp1-corr.md))
 
 [TP 2 - Tir simple](tp2/tp2.md)
 
