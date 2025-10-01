@@ -52,7 +52,7 @@ end
 ```julia
 # Solves for the control and state
 println("Solving...")
-N = 100
+N = 200
 sol = solve(ocp; disc_method=:euler, grid_size=N) 
 plot(sol)
 ```
