@@ -53,6 +53,6 @@ end
 # Solves for the control and state
 println("Solving...")
 N = 100
-sol = solve(ocp; grid_size=N) 
+sol = solve(ocp; disc_method=:euler, grid_size=N) 
 plot(sol)
 ```
