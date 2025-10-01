@@ -39,6 +39,8 @@ ocp = @def begin
     X(0)  == [x0, y0, θ0]
     X(tf) == [xf, yf, θf]
 
+    -1 ≤ u(t) ≤ 1
+
     ∂(x)(t) == w + cos(θ(t))
     ∂(y)(t) == sin(θ(t))
     ∂(θ)(t) == u(t)
