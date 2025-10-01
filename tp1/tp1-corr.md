@@ -42,6 +42,9 @@ ocp = @def begin
     ∂(x)(t) == w + cos(θ(t))
     ∂(y)(t) == sin(θ(t))
     ∂(θ)(t) == u(t)
+
+    tf → min
+end
 ```
 
 ```julia
