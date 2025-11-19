@@ -15,7 +15,7 @@ $$ x(0)=-1,\quad x(1)=0. $$
 Résoudre le problème numériquement à l'aide d'une méthode de tir.
 
 ```julia
-using OptimalControl, OrdinaryDiffEq, MINPACK, Plots
+using OptimalControl, OrdinaryDiffEq, MINPACK, NonlinearSolve, Plots
 
 t0 = 0.0
 tf = 1.0
@@ -34,10 +34,17 @@ function shoot!(s, p0)
     s[1] = xf - xf_fixed # TO BE UPDATED
 end
 
-# Solve
 p0_guess = 1.0 # initial guess
+
+# Solve (MINPACK)
 sol = fsolve(shoot!, [p0_guess])
 p0 = sol.x[1]
+
+# Solve (NonLinearSolve)
+shoot!(s, p0, λ) = shoot!(s, p0)
+prob = NonlinearProblem(shoot!, [p0_guess])
+sol = solve(prob; show_trace=Val(true))
+p0 = sol.u[1]
 
 # Plots
 guess = f((t0, tf), x0, p0_guess)
