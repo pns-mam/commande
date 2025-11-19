@@ -8,8 +8,9 @@ $$ \frac{1}{2} \int_0^1 |u(t)|^2\ \mathrm{d}t \to \min $$
 
 sous les contraintes
 
-$$ \dot{x}(t) = -x(t)+u(t),\quad u(t) \in \mathbf{R},\quad t \in [0,1],\quad
-   x(0)=-1,\quad x(1)=0. $$
+$$ \dot{x}(t) = -x(t)+u(t),\quad u(t) \in \mathbf{R},\quad t \in [0,1], $$
+
+$$ x(0)=-1,\quad x(1)=0. $$
 
 Résoudre le problème numériquement à l'aide d'une méthode de tir.
 
@@ -34,13 +35,13 @@ end
 
 # Solve
 p0_guess = 1.0 # initial guess
-sol = fsolve(shoot!, [ p0_guess ])
+sol = fsolve(shoot!, [p0_guess])
 p0 = sol.x[1]
 
 # Plots
 guess = f((t0, tf), x0, p0_guess)
 fig1 = plot(guess, xlabel="t", label=[ "x (guess)" "p (guess)" ], linestyle=:dash)
 sol = f((t0, tf), x0, p0)
-plot!(fig1, sol, label=[ "x (sol)" "p (sol)"], linestyle=:solid)
-plot!(fig1, [ t0, tf ], [ xf_fixed[1], xf_fixed[1] ], label="target", colour=:black)
+plot!(fig1, sol, label=["x (sol)" "p (sol)"], linestyle=:solid)
+plot!(fig1, [t0, tf], [xf_fixed[1], xf_fixed[1]], label="target", colour=:black)
 ```
