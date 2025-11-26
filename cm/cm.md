@@ -7,11 +7,6 @@
 
 ### 1. Introduction
 
-- commandabilité, existence, condition nécessaire
-- formulation mathématique (Lagrange) / notion de solution (régularité AC)
-- remarques : coûts de Mayer, Bolza (et équivalence), autres contraintes
-- ex : pb de navigation 
-
 ### 2 . Méthodes directes
 
 ### 3. Principe du maximum de Pontrjagin
