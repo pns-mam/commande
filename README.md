@@ -33,6 +33,7 @@
 [TP 4 - Hexapawn](tp4/tp4.ipynb)
 
 [TP 5 - OpenAI gym: taxi!](tp5/q-taxi.ipynb)
+([solution](tp5/tp5-sol.md))
 
 # Organisation et intervenants
 
