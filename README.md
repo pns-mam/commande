@@ -29,6 +29,7 @@
 ([solution](tp2/tp2-sol.md))
 
 [TP 3 - MPC](tp3/tp3.md)
+([solution](tp3/tp3-sol.md))
 
 [TP 4 - Hexapawn](tp4/tp4.ipynb)
 
