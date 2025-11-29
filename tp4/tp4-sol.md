@@ -14,9 +14,10 @@ See: Gardner, M. *The unexpected hanging and other mathematical diversions.* Chi
 
 ![image.png](hexapawn.png)
 
-## Reinforcement
 
 ```julia
+## Reinforcement
+
 """
     member(x, l)
 
@@ -47,9 +48,7 @@ function member(x, l)
     
     return b
 end
-```
 
-```julia
 """
     prune(x, l)
 
@@ -76,9 +75,7 @@ function prune(x, l)
     
     return ll
 end
-```
 
-```julia
 """
     reinforce(X, u, lX, lu)
 
@@ -124,11 +121,9 @@ function reinforce(X, u, lX, lu)
     
     return llu
 end
-```
 
 ## Dynamics of player1 (white) and player2 (black / AI)
 
-```julia
 """
     f1(X, u)
 
@@ -155,9 +150,7 @@ function f1(X, u)
     
     return Y
 end
-```
 
-```julia
 """
     f2(X, u)
 
@@ -184,11 +177,9 @@ function f2(X, u)
     
     return Y
 end
-```
 
 ## Random player1 and player2
 
-```julia
 """
     play1(X, inter=false)
 
@@ -232,9 +223,7 @@ function play1(X, inter=false)
     
     return u
 end
-```
 
-```julia
 """
     play2(X, lX, lu)
 
@@ -280,11 +269,9 @@ function play2(X, lX, lu)
     
     return u
 end
-```
 
 ## Win test for player1 and 2
 
-```julia
 """
     win1(X)
 
@@ -313,9 +300,7 @@ function win1(X)
     
     return b
 end
-```
 
-```julia
 """
     win2(X)
 
@@ -344,11 +329,9 @@ function win2(X)
     
     return b
 end
-```
 
 ## Generation of admissible controls for player1 and player2
 
-```julia
 """
     gen1(X)
 
@@ -395,9 +378,7 @@ function gen1(X)
     
     return lu
 end
-```
 
-```julia
 """
     gen2(X)
 
@@ -444,11 +425,9 @@ function gen2(X)
     
     return lu
 end
-```
 
 ## Game
 
-```julia
 """
     game(lu1, lu3, lu5, inter=false, dsp=false)
 
@@ -564,11 +543,9 @@ function game(lu1, lu3, lu5, inter=false, dsp=false)
     
     return llu1, llu3, llu5, winner
 end
-```
 
 ## Iterated game for learning
 
-```julia
 using LinearAlgebra
 using Plots
 
@@ -579,7 +556,7 @@ const lX1 = [
     [2 2 2; 0 1 0; 1 0 1]
 ]
 
-const lX3 = [
+_lX3 = [
     [2 0 2; 2 1 0; 0 0 1],
     [0 2 2; 1 2 0; 0 0 1],
     [2 0 2; 1 1 0; 0 1 0],
@@ -595,17 +572,17 @@ const lX3 = [
 
 llX3 = []
 for i = 1:length(lX3)
-    X = lX3[i]
+    X = _lX3[i]
     Y = [X[:, 3] X[:, 2] X[:, 1]]
     if norm(X - Y) != 0
-        if !member(Y, lX3)
+        if !member(Y, _lX3)
             push!(llX3, Y)
         end
     end
 end
-lX3 = [lX3; llX3]  # adds missing symmetric configurations
+const lX3 = [_lX3; llX3]  # adds missing symmetric configurations
 
-const lX5 = [
+_lX5 = [
     [0 0 2; 2 2 1; 0 0 0],
     [2 0 0; 1 1 1; 0 0 0],
     [0 2 0; 2 1 1; 0 0 0],
@@ -620,16 +597,16 @@ const lX5 = [
 ]
 
 llX5 = []
-for i = 1:length(lX5)
-    X = lX5[i]
+for i = 1:length(l_X5)
+    X = _lX5[i]
     Y = [X[:, 3] X[:, 2] X[:, 1]]
     if norm(X - Y) != 0
-        if !member(Y, lX5)
+        if !member(Y, _lX5)
             push!(llX5, Y)
         end
     end
 end
-lX5 = [lX5; llX5]  # adds missing symmetric configurations
+const lX5 = [_lX5; llX5]  # adds missing symmetric configurations
 
 # Lists of all possible controls (moves) for player2 associated from X1, X3 and X5
 
