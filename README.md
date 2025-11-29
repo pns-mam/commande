@@ -35,7 +35,7 @@
 
 [TP 4 - Hexapawn](tp4/tp4.ipynb)
 ([solution](tp4/tp4-sol.ipynb))
-([solution (Julia)](tp4/tp4-sol.md))
+([solution - Julia](tp4/tp4-sol.md))
 
 [TP 5 - OpenAI gym: taxi!](tp5/q-taxi.ipynb)
 ([solution](tp5/q-taxi-sol.ipynb))
