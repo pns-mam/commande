@@ -1,4 +1,4 @@
-# TP 3 - Hexapawn
+# TP 4 - Hexapawn
 
 ![PNS](http://caillau.perso.math.cnrs.fr/logo-pns.png)
 
