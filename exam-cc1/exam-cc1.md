@@ -20,7 +20,7 @@ où $q(t)$ et $u(t)$ sont de dimension un. Les conditions intiales $q_0$, $\dot{
 
 Déterminer le contrôle optimal pour la condition finale $q(t_f) = 0$ (et $\dot{q}(t_f)$ libre).
 
-**Réponse.** On a $p_2(t_f) = 0$, de sorte que $p_2$ qui est affine s'annule uniquement en $t_f$. Le cas $p_2$ identiquement nulle étant exclu (on aurait sinon $p_1=p_2=p^0=0$), on n'a pas de commutation et $u$ est constant, égal à soit à $+1$, soit à $-1$ par maximisation du hamiltonien. L'existence de solution étant admise, la seule possibilité pour minimiser le temps final est de faire $u \equiv -\text{sgn}(q_0)$.
+**Réponse.** On a $p_2(t_f) = 0$, de sorte que $p_2$ qui est affine s'annule uniquement en $t_f$. Le cas $p_2$ identiquement nul étant exclu (on aurait sinon $p_1=p_2=p^0=0$), on n'a pas de commutation et $u$ est constant, égal à soit à $+1$, soit à $-1$ par maximisation du hamiltonien. L'existence de solution étant admise, la seule possibilité pour minimiser le temps final est de faire $u \equiv -\text{sgn}(q_0)$.
 
 ### 1.2
 
