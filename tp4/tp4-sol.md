@@ -247,6 +247,7 @@ function play2(X, lX, lu)
     i = 1
     found = false
     
+    l = nothing
     while !found && (i <= n)
         if norm(lX[i] - X) == 0
             found = true
@@ -459,6 +460,7 @@ function game(lu1, lu3, lu5, inter=false, dsp=false)
     end
     
     # Move 0: player1
+    u0 = nothing
     while true
         u0 = play1(X0, inter)
         if norm(u0 - [3 3; 2 3]) > 0
@@ -571,7 +573,7 @@ _lX3 = [
 ]
 
 llX3 = []
-for i = 1:length(lX3)
+for i = 1:length(_lX3)
     X = _lX3[i]
     Y = [X[:, 3] X[:, 2] X[:, 1]]
     if norm(X - Y) != 0
@@ -597,7 +599,7 @@ _lX5 = [
 ]
 
 llX5 = []
-for i = 1:length(l_X5)
+for i = 1:length(_lX5)
     X = _lX5[i]
     Y = [X[:, 3] X[:, 2] X[:, 1]]
     if norm(X - Y) != 0
@@ -640,5 +642,4 @@ for i = 1:N
 end
 
 plot(winner, ylim=(0.5, 2.5), xlim=(1, N), legend=false)
-plot(cumsum(winner), ylim=(0, 2*N), xlim=(1, N), legend=false)
 ```
