@@ -108,7 +108,9 @@ $$ \int_0^1 t_f(s) \left[ p^0 f^0(x(s),u(s))+(p(s)|f(x(s),u(s))) \right] \,\math
 
 **Réponse.**
 
-$$ 0 = p_{t_f}(1) - p_{t_f}(0) = \int_0^1 t_f(s) \left[ p^0 f^0(x(s),u(s))+(p(s)|f(x(s),u(s))) \right] \,\mathrm{d}s $$
+$$ 0 = p_{t_f}(1) - p_{t_f}(0) = \int_0^1 \left[ p^0 f^0(x(s),u(s))+(p(s)|f(x(s),u(s))) \right] \,\mathrm{d}s $$
+
+d'où la nullité de l'intégrale indiquée en multipliant par $t_f(s) = \text{cte}$
 
 ### 2.7
 
