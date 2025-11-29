@@ -663,8 +663,5 @@ for i = 1:N
 end
 
 plot(winner, ylim=(0.5, 2.5), xlim=(1, N), legend=false)
-```
-
-```julia
 plot(cumsum(winner), ylim=(0, 2*N), xlim=(1, N), legend=false)
 ```
