@@ -8,6 +8,8 @@
 
 # Exam cc no. 1
 
+**Durée 2H00. Pas de documents autorisés. Tous les exercices sont indépendants. Le barème prévisionnel est indiqué pour chaque exercice.**
+
 ## Exercice 1 (8 points)
 
 On considère le problème de minimisation du temps final pour la dynamique
