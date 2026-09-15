@@ -20,7 +20,7 @@
 # Organisation et intervenants
 
 - 10 séances de 3H
-- [J.-B. Caillau](mailto:jean-baptiste.caillau@univ-cotedazur.fr)
+- Intervenant [J.-B. Caillau](mailto:jean-baptiste.caillau@univ-cotedazur.fr)
 
 # Évaluation
 
