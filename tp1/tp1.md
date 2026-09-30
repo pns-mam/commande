@@ -93,10 +93,4 @@ step = 5
 traj_plot = plot(x1, y1; c=:black, lw=3)
 plot!(size=(600,600))
 scatter!(traj_plot, x1[1:step:end], y1[1:step:end]; c=:red, legend=false)
-
-for i = 1:5:N+1 
-    z = [x1[i] y1[i]]
-    plot!([z[1]], [z[2]], seriestype = :scatter, color =:red , legend = false) 
-    plot!(size=(600,600))
-end
 ```
