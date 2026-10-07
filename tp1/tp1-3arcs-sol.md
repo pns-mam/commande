@@ -105,9 +105,25 @@ y_plot = plot(t, y1, xlabel = "t", ylabel = "position y", legend = false, fmt = 
 u_plot = plot(t, u1, xlabel = "t", ylabel = "control", legend = false, fmt = :png)
 display(plot(x_plot, y_plot, θ_plot, u_plot, layout = (2,2)))
 
-# Plots: trajectory 
+# Plots: trajectory with heading arrows
 step = 5
-traj_plot = plot(x1, y1; c=:black, lw=3)
-plot!(size=(600,600))
-scatter!(traj_plot, x1[1:step:end], y1[1:step:end]; c=:red, legend=false)
+idx = 1:step:length(x1)
+L = 2.0 # constant arrow length (data units)
+ux, uy = L * cos.(θ1[idx]), L * sin.(θ1[idx])
+
+traj_plot = plot(x1, y1; c=:black, lw=3, aspect_ratio=:equal, size=(600,600), legend=false)
+scatter!(traj_plot, x1[idx], y1[idx]; c=:red)
+quiver!(traj_plot, x1[idx], y1[idx]; quiver=(ux, uy), c=:blue)
+display(traj_plot)
+
+# Animation: progression along the curve
+xl = extrema(x1) .+ (-1, 1)
+yl = extrema(y1) .+ (-1, 1)
+anim = @animate for k in eachindex(idx)
+    plot(x1, y1; c=:lightgray, lw=3, aspect_ratio=:equal, size=(600,600), legend=false, xlims=xl, ylims=yl)
+    plot!(x1[1:idx[k]], y1[1:idx[k]]; c=:black, lw=3)
+    scatter!(x1[idx[1:k]], y1[idx[1:k]]; c=:red)
+    quiver!(x1[idx[1:k]], y1[idx[1:k]]; quiver=(ux[1:k], uy[1:k]), c=:blue)
+end
+gif(anim, "trajectory.gif", fps=10)
 ```
