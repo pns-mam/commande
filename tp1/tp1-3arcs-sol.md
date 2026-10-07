@@ -24,11 +24,11 @@ set_optimizer_attribute(sys, "tol", 1e-8)
 set_optimizer_attribute(sys, "max_iter", 500)
 
 # Parameters
-w = 0.3
+w = 0.5
 x0 = 0 
 y0 = 0 
 θ0 = π/7
-xf = 4
+xf = 5
 yf = 7
 θf =-π/2 
 P = 100
