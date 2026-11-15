@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TP 1 - Navigation problem (a.k.a. Zermelo-Markov-Dubins)</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<script
+src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+type="text/javascript"></script>
+</head>
+<body>
+<nav><a href="../index.html">← Accueil</a> · <span>Dans ce dossier :</span> <a href="tp1-sol.html">tp1-sol</a> · <a href="index.html">tp1</a></nav>
+<main>
+<p><img src="../logo-pns.png" alt="PNS" /></p>
+<h2 id="mam5-inum---commande-optimale">MAM5-INUM - Commande
+optimale</h2>
+<h1 id="tp-1---navigation-problem-aka-zermelo-markov-dubins">TP 1 -
+Navigation problem (a.k.a. Zermelo-Markov-Dubins)</h1>
+<h3 id="special-thanks-p-negre--m-sadak-polytech-nice-sophia">Special
+thanks: P. Negre &amp; M. Sadak (Polytech Nice Sophia)</h3>
+<p>One considers a ship in a constant current, <span
+class="math inline">\(0 \leq w \lt 1\)</span>. The angle of the velocity
+(wrt. to the water) is controlled, leading to the following
+dynamics:</p>
+<p><span class="math display">\[ \begin{array}{rcl}
+\dot{x}(t) &amp;=&amp; w+\cos\theta(t),\quad t \in [0,t_f]\\
+\dot{y}(t) &amp;=&amp; \sin\theta(t),\\
+\dot{\theta}(t) &amp;=&amp; u(t).
+\end{array} \]</span></p>
+<p>The turning rate (= curvature of turns) is limited, so <span
+class="math inline">\(|u(t)| \leq 1\)</span>. There boundary conditions
+at <span class="math inline">\(t=0\)</span> and <span
+class="math inline">\(t=t_f\)</span> on the position <span
+class="math inline">\((x,y)\)</span> and on the angle <span
+class="math inline">\(\theta\)</span> of the velocity in the water
+referential. The final time is to be minimised. The problem originates
+from a collaboration with the French company <a
+href="https://www.cgg.com">CGG</a> that is interested in optimal
+maneuvers for very large ships doing marine prospection.</p>
+<p><img src="ship.png" alt="ship" /></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#JuMP model, Ipopt solver</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">JuMP</span>, <span class="bu">Ipopt</span>, <span class="bu">Plots</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>sys <span class="op">=</span> <span class="fu">Model</span>(<span class="fu">optimizer_with_attributes</span>(Ipopt.Optimizer,<span class="st">&quot;print_level&quot;</span><span class="op">=&gt;</span> <span class="fl">5</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set_optimizer_attribute</span>(sys, <span class="st">&quot;tol&quot;</span>, <span class="fl">1e-8</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set_optimizer_attribute</span>(sys, <span class="st">&quot;max_iter&quot;</span>, <span class="fl">500</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Parameters</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> <span class="fl">0.5</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>x0 <span class="op">=</span> <span class="fl">0</span> </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> <span class="fl">0</span> </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>θ<span class="fl">0</span> <span class="op">=</span> <span class="cn">π</span><span class="op">/</span><span class="fl">7</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>xf <span class="op">=</span> <span class="fl">5</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>yf <span class="op">=</span> <span class="fl">7</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>θf <span class="op">=-</span><span class="cn">π</span><span class="op">/</span><span class="fl">2</span> </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> <span class="fl">100</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>Δt <span class="op">=</span> <span class="fl">1</span><span class="op">/</span>P</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Bounds for variables</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="pp">@variables</span>(sys,<span class="cf">begin</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    x[<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span>P]           <span class="co"># x </span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    y[<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span>P]           <span class="co"># y </span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    θ[<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span>P]           <span class="co"># theta</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">-</span><span class="fl">1</span> <span class="op">≤</span> u[<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>] <span class="op">≤</span> <span class="fl">1</span>       <span class="co"># u1 to u3, piecewise constant control</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>     <span class="fl">0</span> <span class="op">≤</span> τ[<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>]           <span class="co"># tau1 to tau3, length of subintervals</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span>)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Objective</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="pp">@objective</span>(sys, Min, τ[<span class="fl">1</span>]<span class="op">+</span>τ[<span class="fl">2</span>]<span class="op">+</span>τ[<span class="fl">3</span>])</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Constraints </span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="pp">@constraints</span>(sys, <span class="cf">begin</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    x[<span class="fl">1</span>, <span class="fl">1</span>] <span class="op">==</span> x0</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    y[<span class="fl">1</span>, <span class="fl">1</span>] <span class="op">==</span> y0</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    θ[<span class="fl">1</span>, <span class="fl">1</span>] <span class="op">==</span> θ<span class="fl">0</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    x[<span class="fl">2</span>, <span class="fl">1</span>] <span class="op">==</span> x[<span class="fl">1</span>, P]</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    y[<span class="fl">2</span>, <span class="fl">1</span>] <span class="op">==</span> y[<span class="fl">1</span>, P]</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    θ[<span class="fl">2</span>, <span class="fl">1</span>] <span class="op">==</span> θ[<span class="fl">1</span>, P]</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    x[<span class="fl">3</span>, <span class="fl">1</span>] <span class="op">==</span> x[<span class="fl">2</span>, P]</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    y[<span class="fl">3</span>, <span class="fl">1</span>] <span class="op">==</span> y[<span class="fl">2</span>, P]</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    θ[<span class="fl">3</span>, <span class="fl">1</span>] <span class="op">==</span> θ[<span class="fl">2</span>, P]</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    x[<span class="fl">3</span>, P] <span class="op">==</span> xf</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    y[<span class="fl">3</span>, P] <span class="op">==</span> yf</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    θ[<span class="fl">3</span>, P] <span class="op">==</span> θf</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span>)</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Dynamics: Crank-Nicolson scheme</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="fl">1</span> <span class="op">:</span> P<span class="op">-</span><span class="fl">1</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="pp">@NLconstraints</span>(sys, <span class="cf">begin</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>        <span class="co"># x&#39; = w + cos(theta)</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>        x[<span class="fl">1</span>, j<span class="op">+</span><span class="fl">1</span>] <span class="op">==</span> x[<span class="fl">1</span>, j] <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> τ[<span class="fl">1</span>]<span class="op">*</span>Δt <span class="op">*</span> ( w <span class="op">+</span> <span class="fu">cos</span>(θ[<span class="fl">1</span>, j]) <span class="op">+</span> w <span class="op">+</span> <span class="fu">cos</span>(θ[<span class="fl">1</span>, j<span class="op">+</span><span class="fl">1</span>]) )</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>        x[<span class="fl">2</span>, j<span class="op">+</span><span class="fl">1</span>] <span class="op">==</span> x[<span class="fl">2</span>, j] <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> τ[<span class="fl">2</span>]<span class="op">*</span>Δt <span class="op">*</span> ( w <span class="op">+</span> <span class="fu">cos</span>(θ[<span class="fl">2</span>, j]) <span class="op">+</span> w <span class="op">+</span> <span class="fu">cos</span>(θ[<span class="fl">2</span>, j<span class="op">+</span><span class="fl">1</span>]) )</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        x[<span class="fl">3</span>, j<span class="op">+</span><span class="fl">1</span>] <span class="op">==</span> x[<span class="fl">3</span>, j] <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> τ[<span class="fl">3</span>]<span class="op">*</span>Δt <span class="op">*</span> ( w <span class="op">+</span> <span class="fu">cos</span>(θ[<span class="fl">3</span>, j]) <span class="op">+</span> w <span class="op">+</span> <span class="fu">cos</span>(θ[<span class="fl">3</span>, j<span class="op">+</span><span class="fl">1</span>]) )</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>        <span class="co"># y&#39; = sin(theta) </span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>        y[<span class="fl">1</span>, j<span class="op">+</span><span class="fl">1</span>] <span class="op">==</span> y[<span class="fl">1</span>, j] <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> τ[<span class="fl">1</span>]<span class="op">*</span>Δt <span class="op">*</span> ( <span class="fu">sin</span>(θ[<span class="fl">1</span>, j]) <span class="op">+</span> <span class="fu">sin</span>(θ[<span class="fl">1</span>, j<span class="op">+</span><span class="fl">1</span>]) )</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>        y[<span class="fl">2</span>, j<span class="op">+</span><span class="fl">1</span>] <span class="op">==</span> y[<span class="fl">2</span>, j] <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> τ[<span class="fl">2</span>]<span class="op">*</span>Δt <span class="op">*</span> ( <span class="fu">sin</span>(θ[<span class="fl">2</span>, j]) <span class="op">+</span> <span class="fu">sin</span>(θ[<span class="fl">2</span>, j<span class="op">+</span><span class="fl">1</span>]) )</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>        y[<span class="fl">3</span>, j<span class="op">+</span><span class="fl">1</span>] <span class="op">==</span> y[<span class="fl">3</span>, j] <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> τ[<span class="fl">3</span>]<span class="op">*</span>Δt <span class="op">*</span> ( <span class="fu">sin</span>(θ[<span class="fl">3</span>, j]) <span class="op">+</span> <span class="fu">sin</span>(θ[<span class="fl">3</span>, j<span class="op">+</span><span class="fl">1</span>]) )</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>        <span class="co"># theta&#39; = u</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>        θ[<span class="fl">1</span>, j<span class="op">+</span><span class="fl">1</span>] <span class="op">==</span> θ[<span class="fl">1</span>, j] <span class="op">+</span>       τ[<span class="fl">1</span>]<span class="op">*</span>Δt <span class="op">*</span> u[<span class="fl">1</span>]</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>        θ[<span class="fl">2</span>, j<span class="op">+</span><span class="fl">1</span>] <span class="op">==</span> θ[<span class="fl">2</span>, j] <span class="op">+</span>       τ[<span class="fl">2</span>]<span class="op">*</span>Δt <span class="op">*</span> u[<span class="fl">2</span>]</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>        θ[<span class="fl">3</span>, j<span class="op">+</span><span class="fl">1</span>] <span class="op">==</span> θ[<span class="fl">3</span>, j] <span class="op">+</span>       τ[<span class="fl">3</span>]<span class="op">*</span>Δt <span class="op">*</span> u[<span class="fl">3</span>]</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span>)</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="co"># Solves for the control and state</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;Solving...&quot;</span>)</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>status <span class="op">=</span> <span class="fu">optimize!</span>(sys)</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;Solver status: &quot;</span>, <span class="fu">termination_status</span>(sys))</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> <span class="fu">value</span>.(x)<span class="ch">&#39;[:]</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>y1 <span class="op">=</span> <span class="fu">value</span>.(y)<span class="ch">&#39;[:]</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>θ<span class="fl">1</span> <span class="op">=</span> <span class="fu">value</span>.(θ)<span class="ch">&#39;[:]</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>u1 <span class="op">=</span> [ <span class="fu">value</span>.(u)[<span class="fl">1</span>]<span class="fu">*ones</span>(P); <span class="fu">value</span>.(u)[<span class="fl">2</span>]<span class="fu">*ones</span>(P); <span class="fu">value</span>.(u)[<span class="fl">3</span>]<span class="fu">*ones</span>(P) ]</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>τ<span class="fl">1</span> <span class="op">=</span> <span class="fu">value</span>.(τ)</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;Cost: &quot;</span> , <span class="fu">objective_value</span>(sys))</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;tf: &quot;</span>, τ<span class="fl">1</span>[<span class="fl">1</span>]<span class="op">+</span>τ<span class="fl">1</span>[<span class="fl">2</span>]<span class="op">+</span>τ<span class="fl">1</span>[<span class="fl">3</span>], <span class="st">&quot;</span><span class="sc">\t</span><span class="st"> τ: &quot;</span>, τ<span class="fl">1</span>)</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots: states and control</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">3</span><span class="op">*</span>P)</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>t[<span class="fl">1</span><span class="op">:</span>P] <span class="op">=</span> τ<span class="fl">1</span>[<span class="fl">1</span>]<span class="fu">*</span>(<span class="fl">0</span><span class="op">:</span>P<span class="op">-</span><span class="fl">1</span>)</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>t[P<span class="op">+</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">*</span>P] <span class="op">=</span> P<span class="op">*</span>τ<span class="fl">1</span>[<span class="fl">1</span>] <span class="op">.+</span> τ<span class="fl">1</span>[<span class="fl">2</span>]<span class="fu">*</span>(<span class="fl">0</span><span class="op">:</span>P<span class="op">-</span><span class="fl">1</span>)</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>t[<span class="fl">2</span><span class="op">*</span>P<span class="op">+</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">*</span>P] <span class="op">=</span> <span class="fu">P*</span>(τ<span class="fl">1</span>[<span class="fl">1</span>]<span class="op">+</span>τ<span class="fl">1</span>[<span class="fl">2</span>]) <span class="op">.+</span> τ<span class="fl">1</span>[<span class="fl">3</span>]<span class="fu">*</span>(<span class="fl">0</span><span class="op">:</span>P<span class="op">-</span><span class="fl">1</span>)</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> Δt <span class="op">*</span> t</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>x_plot <span class="op">=</span> <span class="fu">plot</span>(t, x1, xlabel <span class="op">=</span> <span class="st">&quot;t&quot;</span>, ylabel <span class="op">=</span> <span class="st">&quot;position x&quot;</span>, legend <span class="op">=</span> <span class="cn">false</span>, fmt <span class="op">=</span> <span class="op">:</span>png)</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>y_plot <span class="op">=</span> <span class="fu">plot</span>(t, y1, xlabel <span class="op">=</span> <span class="st">&quot;t&quot;</span>, ylabel <span class="op">=</span> <span class="st">&quot;position y&quot;</span>, legend <span class="op">=</span> <span class="cn">false</span>, fmt <span class="op">=</span> <span class="op">:</span>png)</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>θ_plot <span class="op">=</span> <span class="fu">plot</span>(t, θ<span class="fl">1</span>, xlabel <span class="op">=</span> <span class="st">&quot;t&quot;</span>, ylabel <span class="op">=</span> <span class="st">&quot;θ&quot;</span>, legend <span class="op">=</span> <span class="cn">false</span>, fmt <span class="op">=</span> <span class="op">:</span>png)</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>u_plot <span class="op">=</span> <span class="fu">plot</span>(t, u1, xlabel <span class="op">=</span> <span class="st">&quot;t&quot;</span>, ylabel <span class="op">=</span> <span class="st">&quot;control&quot;</span>, legend <span class="op">=</span> <span class="cn">false</span>, fmt <span class="op">=</span> <span class="op">:</span>png)</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(<span class="fu">plot</span>(x_plot, y_plot, θ_plot, u_plot, layout <span class="op">=</span> (<span class="fl">2</span>,<span class="fl">2</span>)))</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots: trajectory with heading arrows</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>step <span class="op">=</span> <span class="fl">5</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>idx <span class="op">=</span> <span class="fl">1</span><span class="op">:</span>step<span class="op">:</span><span class="fu">length</span>(x1)</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> <span class="fl">2.0</span> <span class="co"># constant arrow length (data units)</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>ux, uy <span class="op">=</span> L <span class="op">*</span> <span class="fu">cos</span>.(θ<span class="fl">1</span>[idx]), L <span class="op">*</span> <span class="fu">sin</span>.(θ<span class="fl">1</span>[idx])</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>traj_plot <span class="op">=</span> <span class="fu">plot</span>(x1, y1; c<span class="op">=:</span>black, lw<span class="op">=</span><span class="fl">3</span>, aspect_ratio<span class="op">=:</span>equal, size<span class="op">=</span>(<span class="fl">600</span>,<span class="fl">600</span>), legend<span class="op">=</span><span class="cn">false</span>)</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="fu">scatter!</span>(traj_plot, x1[idx], y1[idx]; c<span class="op">=:</span>red)</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="fu">quiver!</span>(traj_plot, x1[idx], y1[idx]; quiver<span class="op">=</span>(ux, uy), c<span class="op">=:</span>blue)</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(traj_plot)</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="co"># Animation: progression along the curve</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>xl <span class="op">=</span> <span class="fu">extrema</span>(x1) <span class="op">.+</span> (<span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span>)</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>yl <span class="op">=</span> <span class="fu">extrema</span>(y1) <span class="op">.+</span> (<span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span>)</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>anim <span class="op">=</span> <span class="pp">@animate</span> <span class="cf">for</span> k <span class="kw">in</span> <span class="fu">eachindex</span>(idx)</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(x1, y1; c<span class="op">=:</span>lightgray, lw<span class="op">=</span><span class="fl">3</span>, aspect_ratio<span class="op">=:</span>equal, size<span class="op">=</span>(<span class="fl">600</span>,<span class="fl">600</span>), legend<span class="op">=</span><span class="cn">false</span>, xlims<span class="op">=</span>xl, ylims<span class="op">=</span>yl)</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot!</span>(x1[<span class="fl">1</span><span class="op">:</span>idx[k]], y1[<span class="fl">1</span><span class="op">:</span>idx[k]]; c<span class="op">=:</span>black, lw<span class="op">=</span><span class="fl">3</span>)</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scatter!</span>(x1[idx[<span class="fl">1</span><span class="op">:</span>k]], y1[idx[<span class="fl">1</span><span class="op">:</span>k]]; c<span class="op">=:</span>red)</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>    <span class="fu">quiver!</span>(x1[idx[<span class="fl">1</span><span class="op">:</span>k]], y1[idx[<span class="fl">1</span><span class="op">:</span>k]]; quiver<span class="op">=</span>(ux[<span class="fl">1</span><span class="op">:</span>k], uy[<span class="fl">1</span><span class="op">:</span>k]), c<span class="op">=:</span>blue)</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="fu">gif</span>(anim, <span class="st">&quot;trajectory.gif&quot;</span>, fps<span class="op">=</span><span class="fl">10</span>)</span></code></pre></div>
+</main>
+<script>
+// "Copier" button on every code block
+document.querySelectorAll("pre").forEach(function (pre) {
+  var box = pre.parentElement;
+  if (!box.classList.contains("sourceCode")) {
+    box = document.createElement("div");
+    box.className = "codewrap";
+    pre.parentNode.insertBefore(box, pre);
+    box.appendChild(pre);
+  }
+  var btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "copy-btn";
+  btn.textContent = "Copier";
+  btn.addEventListener("click", function () {
+    var text = (pre.querySelector("code") || pre).textContent;
+    var done = function () { btn.textContent = "Copié !"; setTimeout(function () { btn.textContent = "Copier"; }, 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { btn.textContent = "Erreur"; });
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) { btn.textContent = "Erreur"; }
+      document.body.removeChild(ta);
+    }
+  });
+  box.appendChild(btn);
+});
+</script>
+<footer>Page générée automatiquement à partir des fichiers Markdown du dépôt (pandoc, MathJax).</footer>
+</body>
+</html>

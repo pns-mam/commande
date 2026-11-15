@@ -1,0 +1,2 @@
+# Files (relative paths, one per line) to keep off the public site, e.g. solutions or exams:
+# tp1/tp1-sol.md

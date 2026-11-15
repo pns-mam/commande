@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commande optimale – 2026-27</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<main>
+<p><img src="logo-pns.png" alt="PNS" /></p>
+<h2 id="mam5m2-inum">MAM5/M2-INUM</h2>
+<h1 id="commande-optimale">Commande optimale</h1>
+<h1 id="2026-27">2026-27</h1>
+<p><a
+href="https://github.com/pns-mam/commande/discussions/1">Discussion</a></p>
+<p><a href="cm/">Plan du cours</a></p>
+<p><a href="cm/cm1.pdf">CM 1</a></p>
+<p><a href="cm/cm2.pdf">CM 2</a></p>
+<p><a href="cm/cm3.pdf">CM 3</a></p>
+<p><a href="cm/cm4.pdf">CM 4</a></p>
+<p><a href="cm/cm5.pdf">CM 5</a></p>
+<p><a href="cm/cm6.pdf">CM 6</a></p>
+<p><a href="tp1/">TP 1 - Navigation</a> (<a
+href="tp1/tp1-sol.html">solution</a>) (<a
+href="tp1/tp1-3arcs-sol.html">solution 3 arcs</a>) (<a
+href="https://ct.gitlabpages.inria.fr/gallery/nav/nav-julia-gen.html">trailers</a>)</p>
+<p><a href="tp2/">TP 2 - Tir simple</a></p>
+<p><a href="tp3/">TP 3 - MPC</a></p>
+<p><a href="tp4/">TP 4 - Hexapawn</a></p>
+<p><a href="tp5/">TP 5 - OpenAI gym: taxi!</a></p>
+<h1 id="organisation-et-intervenants">Organisation et intervenants</h1>
+<ul>
+<li>10 séances de 3H</li>
+<li>Intervenant <a
+href="mailto:jean-baptiste.caillau@univ-cotedazur.fr">J.-B.
+Caillau</a></li>
+</ul>
+<h1 id="évaluation">Évaluation</h1>
+<ul>
+<li>2 EX CC (tous deux coeff. 1)</li>
+</ul>
+<p><a href="exam-cc1-old/">Exam CC no. 1 (2025-26)</a></p>
+<p><a href="exam-cc2-old/">Exam CC no. 2 (2025-26)</a></p>
+<h1 id="références">Références</h1>
+<p><a
+href="https://www.mit.edu/~dimitrib/RLCOURSECOMPLETE.pdf">Bertsekas, D.
+<em>A course in reinforcement learning.</em> Athena scientific,
+2023</a></p>
+<p><a
+href="https://epubs.siam.org/doi/abs/10.1137/S0363012997331639?journalCode=sjcodc&amp;mobileUi=0">Borkar,
+X.; Meyn, S. P. The ODE method for convergence of stochastic
+approximation and reinforcement learning. <em>SIAM J. Control
+Optim.</em> <strong>38</strong> (2000), no. 2, 447-469</a></p>
+<p><a
+href="https://www.ceremade.dauphine.fr/~ekeland/lectures/Torino.pdf">Ekeland
+I. Mathematics in the social sciences. Torino lectures, 2022</a></p>
+<p><a href="https://math.berkeley.edu/~evans/control.course.pdf">Evans,
+L. C. <em>An introduction to mathematical optimal control theory.</em>
+Univ. California, 2024</a></p>
+<p>Fleming, W. H. ; Rishel, <em>R. W. Deterministic and stochastic
+optimal control.</em> Springer, 1975</p>
+<p>Gardner, M. <em>The unexpected hanging and other mathematical
+diversions.</em> University of Chicago Press, 1991</p>
+<p><a href="https://epubs.siam.org/doi/10.1137/1.9781611978261">Hager,
+W. Computational Methods in Optimal Control: Theory and Practice. SIAM,
+2025</a></p>
+<p><a
+href="https://control-toolbox.org/OptimalControl.jl">OptimalControl.jl</a></p>
+<p><a href="https://arxiv.org/pdf/1806.09460.pdf">Recht, B. A tour of
+reinforcement learning : the view from continuous control. arXiv
+:1806.09460, 2018</a></p>
+<p><a
+href="http://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf">Sutton,
+R. S. ; Barto, A. G. Reinforcement learning : an introduction, MIT
+press, 2015</a></p>
+<p><a href="https://www.ljll.fr/trelat/fichiers/livreBFT.pdf">Trélat, E.
+Contrôle optimal, théorie et applications. Vuibert, 2005</a></p>
+</main>
+<script>
+// "Copier" button on every code block
+document.querySelectorAll("pre").forEach(function (pre) {
+  var box = pre.parentElement;
+  if (!box.classList.contains("sourceCode")) {
+    box = document.createElement("div");
+    box.className = "codewrap";
+    pre.parentNode.insertBefore(box, pre);
+    box.appendChild(pre);
+  }
+  var btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "copy-btn";
+  btn.textContent = "Copier";
+  btn.addEventListener("click", function () {
+    var text = (pre.querySelector("code") || pre).textContent;
+    var done = function () { btn.textContent = "Copié !"; setTimeout(function () { btn.textContent = "Copier"; }, 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { btn.textContent = "Erreur"; });
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) { btn.textContent = "Erreur"; }
+      document.body.removeChild(ta);
+    }
+  });
+  box.appendChild(btn);
+});
+</script>
+<footer>Page générée automatiquement à partir des fichiers Markdown du dépôt (pandoc, MathJax).</footer>
+</body>
+</html>

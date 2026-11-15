@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TP 4</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+<body>
+<nav><a href="../index.html">← Accueil</a></nav>
+<main>
+<div class="cell markdown">
+<p><img src="../logo-pns.png" alt="PNS" /></p>
+<h2 id="mam5-inum---commande">MAM5-INUM - Commande</h2>
+<h1 id="tp-4">TP 4</h1>
+</div>
+<section id="q-learning-taxi" class="cell markdown">
+<h1>Q-Learning: Taxi</h1>
+<h3 id="credits-felipelodur">Credits: <a
+href="https://github.com/felipelodur/Q-Learning-Taxi-v2">@felipelodur</a></h3>
+<p>This notebook presents an implementation of the Q-learning algorithm
+and applies it to the Taxi problem in order to obtain the optimal
+Q-table values for the problem.</p>
+<h3 id="dependencies">Dependencies</h3>
+</section>
+<div class="cell code" data-execution_count="1"
+data-ExecuteTime="{&quot;end_time&quot;:&quot;2021-01-18T16:15:46.693564Z&quot;,&quot;start_time&quot;:&quot;2021-01-18T16:15:46.112568Z&quot;}">
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> clear_output</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gym</span></code></pre></div>
+</div>
+<section id="envinroment-taxi-v3" class="cell markdown">
+<h3>Envinroment: <a
+href="https://www.gymlibrary.dev/environments/toy_text/taxi">Taxi-v3</a></h3>
+<p>This task was introduced in <a
+href="https://dl.acm.org/citation.cfm?id=1622268">Dietterich2000</a> to
+illustrate some issues in hierarchical reinforcement learning. There are
+4 locations (labeled by different letters) and your job is to pick up
+the passenger at one location and drop him off in another. You receive
++20 points for a successful dropoff, and lose 1 point for every timestep
+it takes. There is also a 10 point penalty for illegal pick-up and
+drop-off actions.</p>
+</section>
+<div class="cell code" data-execution_count="2"
+data-ExecuteTime="{&quot;end_time&quot;:&quot;2021-01-18T16:15:47.033563Z&quot;,&quot;start_time&quot;:&quot;2021-01-18T16:15:46.695566Z&quot;}">
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>env <span class="op">=</span> gym.make(<span class="st">&quot;Taxi-v3&quot;</span>) <span class="co"># Create environment</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>env.render() <span class="co"># Show it</span></span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>+---------+
+|R: | : :G|
+| : | : : |
+| : : : : |
+| | : | : |
+|Y| : |B: |
++---------+
+
+</code></pre>
+</div>
+</div>
+<section id="q-table" class="cell markdown">
+<h3>Q-table</h3>
+<p>In <a
+href="https://en.wikipedia.org/wiki/Q-learning"><em>Q-learning</em></a>
+the goal is to learn a policy that will tell an agent which action to
+take under each possible state. The <em>Q-table</em> is responsible to
+store <strong>score</strong> values for each <em>(state, action)</em>
+pair. These values can be initialized with zeros or randomly, and them
+they are updated as you perform <em>exploration</em> in your problem
+domain (which helps to discover which actions leads to a better stream
+of rewards)</p>
+</section>
+<div class="cell code" data-execution_count="3"
+data-ExecuteTime="{&quot;end_time&quot;:&quot;2021-01-18T16:15:48.079566Z&quot;,&quot;start_time&quot;:&quot;2021-01-18T16:15:48.076563Z&quot;}">
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of possible actions</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>action_size <span class="op">=</span> env.action_space.n </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Action size &quot;</span>, action_size) </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of possible states</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>state_size <span class="op">=</span> env.observation_space.n </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;State size &quot;</span>, state_size)</span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>Action size  6
+State size  500
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="4"
+data-ExecuteTime="{&quot;end_time&quot;:&quot;2021-01-18T16:15:48.669041Z&quot;,&quot;start_time&quot;:&quot;2021-01-18T16:15:48.666037Z&quot;}">
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>qtable <span class="op">=</span> np.zeros((state_size, action_size))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(qtable)</span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>[[0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0.]
+ ...
+ [0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0.]]
+</code></pre>
+</div>
+</div>
+<section id="hyper-parameters" class="cell markdown">
+<h3>Hyper-parameters</h3>
+</section>
+<div class="cell code" data-execution_count="5"
+data-ExecuteTime="{&quot;end_time&quot;:&quot;2021-01-18T16:15:49.616040Z&quot;,&quot;start_time&quot;:&quot;2021-01-18T16:15:49.613038Z&quot;}">
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>episodes <span class="op">=</span> <span class="dv">30000</span>            <span class="co"># Total episodes</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>max_steps <span class="op">=</span> <span class="dv">1000</span>            <span class="co"># Max steps per episode</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> <span class="fl">0.3</span>                    <span class="co"># Learning rate</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>decay_fac <span class="op">=</span> <span class="fl">0.00001</span>         <span class="co"># Decay learning rate each iteration</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="fl">0.90</span>                <span class="co"># Discounting rate - later rewards impact less</span></span></code></pre></div>
+</div>
+<section id="exploration-q-learning" class="cell markdown">
+<h3>Exploration (Q-learning)</h3>
+<p>Since <strong>the goal here is to learn the optimal q-table</strong>,
+that is, best policy for each (state,action) pair: we need to perform
+exploration only. If the goal was to learn and solve the environment as
+quickly as possible, it would be necessary to implement an <a
+href="http://home.deib.polimi.it/restelli/MyWebSite/pdf/rl5.pdf">exploration-exploitation</a>
+strategy. This kind of strategy would not work for this goal since we
+want to discover the optimal values for states that would not
+often/never be visited via the exploration-exploitation strategy.</p>
+<p>The exploration strategy here implemented is straightforward: for
+each state we get to, <em>take an action randomly</em>. The randomness
+"guarantees" that we are going to visit each state action pair
+eventually.</p>
+</section>
+<div class="cell code" data-execution_count="6"
+data-ExecuteTime="{&quot;end_time&quot;:&quot;2021-01-18T16:18:08.337846Z&quot;,&quot;start_time&quot;:&quot;2021-01-18T16:15:50.267037Z&quot;}"
+data-scrolled="true">
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> episode <span class="kw">in</span> <span class="bu">range</span>(episodes):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    state <span class="op">=</span> env.reset() <span class="co"># Reset the environment</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    done <span class="op">=</span> <span class="va">False</span>        <span class="co"># Are we done with the environment</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    lr <span class="op">-=</span> decay_fac     <span class="co"># Decaying learning rate</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    step <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> lr <span class="op">&lt;=</span> <span class="dv">0</span>: <span class="co"># Nothing more to learn?</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> step <span class="kw">in</span> <span class="bu">range</span>(max_steps):</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Randomly Choose an Action</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        action <span class="op">=</span> env.action_space.sample()</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Take the action -&gt; observe new state and reward</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        new_state, reward, done, info <span class="op">=</span> env.step(action)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Update qtable values</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> done <span class="op">==</span> <span class="va">True</span>: <span class="co"># If last, do not count future accumulated reward</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>            qtable[state, action] <span class="op">=</span> qtable[state, action]<span class="op">+</span>lr<span class="op">*</span>(reward<span class="op">+</span>gamma<span class="op">*</span><span class="dv">0</span><span class="op">-</span>qtable[state,action])</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>: <span class="co"># Consider accumulated reward of best decision stream</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>            qtable[state, action] <span class="op">=</span> qtable[state,action] <span class="co"># UPDATE</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># moving states</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>        state <span class="op">=</span> new_state</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    episode <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (episode <span class="op">%</span> <span class="dv">3000</span> <span class="op">==</span> <span class="dv">0</span>):</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">&#39;episode = &#39;</span>, episode)</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">&#39;learning rate = &#39;</span>, lr)</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">&#39;-----------&#39;</span>)</span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>episode =  3000
+learning rate =  0.26999999999997
+-----------
+episode =  6000
+learning rate =  0.23999999999993998
+-----------
+episode =  9000
+learning rate =  0.20999999999990998
+-----------
+episode =  12000
+learning rate =  0.17999999999987998
+-----------
+episode =  15000
+learning rate =  0.14999999999984998
+-----------
+episode =  18000
+learning rate =  0.11999999999982693
+-----------
+episode =  21000
+learning rate =  0.08999999999983856
+-----------
+episode =  24000
+learning rate =  0.059999999999848445
+-----------
+episode =  27000
+learning rate =  0.029999999999839697
+-----------
+</code></pre>
+</div>
+</div>
+<section id="using-q-table" class="cell markdown">
+<h3>Using Q-table</h3>
+<p>Now that we have the optimal values in the Q-table, we can use it to
+see our agent taking the best actions in this setting. You can re-run
+the code below to see it solving different environments.</p>
+</section>
+<div class="cell code" data-execution_count="7"
+data-ExecuteTime="{&quot;end_time&quot;:&quot;2021-01-18T16:18:15.856847Z&quot;,&quot;start_time&quot;:&quot;2021-01-18T16:18:08.338847Z&quot;}">
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># New environment</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>state <span class="op">=</span> env.reset()</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>env.render()</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>done <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>total_reward <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span>(done <span class="op">==</span> <span class="va">False</span>):</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    action <span class="op">=</span> <span class="dv">0</span> <span class="co"># UPDATE - Choose best action (Q-table)</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    state, reward, done, info <span class="op">=</span> env.step(action) <span class="co"># Take action</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    total_reward <span class="op">+=</span> reward  <span class="co"># Sum of rewards</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Display it</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    time.sleep(<span class="fl">0.5</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    clear_output(wait<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    env.render()</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">&#39;Episode Reward = &#39;</span>, total_reward)</span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>+---------+
+|R: | : :G|
+| : | : : |
+| : : : : |
+| | : | : |
+|Y| : |B: |
++---------+
+  (South)
+Episode Reward =  -200
+</code></pre>
+</div>
+</div>
+</main>
+<script>
+// "Copier" button on every code block
+document.querySelectorAll("pre").forEach(function (pre) {
+  var box = pre.parentElement;
+  if (!box.classList.contains("sourceCode")) {
+    box = document.createElement("div");
+    box.className = "codewrap";
+    pre.parentNode.insertBefore(box, pre);
+    box.appendChild(pre);
+  }
+  var btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "copy-btn";
+  btn.textContent = "Copier";
+  btn.addEventListener("click", function () {
+    var text = (pre.querySelector("code") || pre).textContent;
+    var done = function () { btn.textContent = "Copié !"; setTimeout(function () { btn.textContent = "Copier"; }, 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { btn.textContent = "Erreur"; });
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) { btn.textContent = "Erreur"; }
+      document.body.removeChild(ta);
+    }
+  });
+  box.appendChild(btn);
+});
+</script>
+<footer>Page générée automatiquement à partir des fichiers Markdown du dépôt (pandoc, MathJax).</footer>
+</body>
+</html>
