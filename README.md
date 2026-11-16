@@ -41,9 +41,9 @@
 
 - 2 EX CC (tous deux coeff. 1)
 
-[Exam CC no. 1 (2025-26)](exam-cc1-old/exam-cc1.pdf)
+[Exam CC no. 1 (2025-26)](exam-cc1-old/exam-cc1.md)
 
-[Exam CC no. 2 (2025-26)](exam-cc2-old/exam-cc2.pdf)
+[Exam CC no. 2 (2025-26)](exam-cc2-old/exam-cc2.md)
 
 # Références
 
