@@ -9,19 +9,7 @@
 
 [Plan du cours](cm/cm.md)
 
-[CM 1](cm/cm1.pdf)
-
-[CM 2](cm/cm2.pdf)
-
-[CM 3](cm/cm3.pdf)
-
-[CM 4](cm/cm4.pdf)
-
-[CM 5](cm/cm5.pdf)
-
-[CM 6](cm/cm6.pdf)
-
-[CM 7](cm/cm7.pdf)
+[CM 1](cm/cm1.pdf) · [CM 2](cm/cm2.pdf) · [CM 3](cm/cm3.pdf) · [CM 4](cm/cm4.pdf) · [CM 5](cm/cm5.pdf) · [CM 6](cm/cm6.pdf) · [CM 7](cm/cm7.pdf)
 
 [TP 1 - Navigation](tp1/tp1.md)
 ([solution](tp1/tp1-sol.md))
