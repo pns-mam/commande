@@ -18,18 +18,18 @@ In practice the current is not constant, it depends on the position, and it is o
 
 ## Discretisation
 
-The open-loop problem (constant current) is solved by a direct method. The structure of the solution is assumed to be **three arcs** on which the control is constant: $u=u_k \in [-1,1]$ on the $k$-th arc, whose duration $\tau_k \geq 0$ is an unknown. The final time is $t_f=\tau_1+\tau_2+\tau_3$. On each arc, time is rescaled to $s\in[0,1]$, so that $t=\tau_k s$ and the dynamics become $\mathrm{d}X/\mathrm{d}s = \tau_k F(X,u_k)$. With $P$ points $s_j=(j-1)/(P-1)$, that is $P-1$ steps of length $1/(P-1)$, the Crank-Nicolson scheme reads
+The open-loop problem (constant current) is solved by a direct method. The structure of the solution is assumed to be **three arcs** on which the control is constant: $u=u_k \in [-1,1]$ on the $k$-th arc, whose duration $\tau_k \geq 0$ is an unknown. The final time is $t_f=\tau_1+\tau_2+\tau_3$. On each arc, time is rescaled to $s\in[0,1]$, so that $t=\tau_k s$ and the dynamics become $\mathrm{d}X/\mathrm{d}s = \tau_k F(X,u_k)$. With $N+1$ points $s_j=(j-1)/N$, that is $N$ steps of length $1/N$, the Crank-Nicolson scheme reads
 
-$$ X_{j+1} = X_j + \frac{\tau_k}{P-1}\cdot\frac{F(X_j,u_k)+F(X_{j+1},u_k)}{2},\quad j=1,\dots,P-1. $$
+$$ X_{j+1} = X_j + \frac{\tau_k}{N}\cdot\frac{F(X_j,u_k)+F(X_{j+1},u_k)}{2},\quad j=1,\dots,N. $$
 
 The three arcs are glued by continuity of the state $(x,y,\theta)$.
 
 ## Questions
 
-1. Why does the discretisation of an arc with $P$ points involve $P-1$ steps of length $\tau_k/(P-1)$, and not $\tau_k/P$ ?
+1. Why does the discretisation of an arc with $N+1$ points involve $N$ steps of length $\tau_k/N$, and not $\tau_k/(N+1)$ ?
 2. Complete the function `solve_direct` (JuMP model, solved with Ipopt) : variables, objective, boundary conditions, continuity between arcs, Crank-Nicolson dynamics. Check that it returns $u_1\simeq 1$, $u_3\simeq -1$ for the data given.
-3. Open loop : simulate the control found for the constant current $w(x_0,y_0)$ on the real system. How far from the target is the final point? How does it change with $P$?
-4. MPC : run the loop and compare with the open-loop trajectory. What is the influence of $\Delta t$, $\varepsilon$ and $P$ ?
+3. Open loop : simulate the control found for the constant current $w(x_0,y_0)$ on the real system. How far from the target is the final point? How does it change with $N$?
+4. MPC : run the loop and compare with the open-loop trajectory. What is the influence of $\Delta t$, $\varepsilon$ and $N$ ?
 
 ## Problem definition
 
@@ -59,7 +59,7 @@ end
 ## Solver (JuMP)
 
 ```julia
-function solve_direct(x0, y0, θ0, xf, yf, θf, w, P=50; tol=1e-8, max_iter=500, print_level=5)
+function solve_direct(x0, y0, θ0, xf, yf, θf, w, N=50; tol=1e-8, max_iter=500, print_level=5)
 
     sys = Model(Ipopt.Optimizer)
     set_attribute(sys, "print_level", print_level)
@@ -67,10 +67,10 @@ function solve_direct(x0, y0, θ0, xf, yf, θf, w, P=50; tol=1e-8, max_iter=500,
     set_attribute(sys, "max_iter", max_iter)
 
     # TO BE UPDATED
-    # - variables: x, y, θ (3 arcs x P points), u (3 values in [-1, 1]), τ (3 durations >= 0)
+    # - variables: x, y, θ (3 arcs x (N+1) points), u (3 values in [-1, 1]), τ (3 durations >= 0)
     # - objective: final time
     # - boundary conditions and continuity between the arcs
-    # - dynamics: Crank-Nicolson scheme, P-1 steps of length τ[k]/(P-1) on arc k
+    # - dynamics: Crank-Nicolson scheme, N steps of length τ[k]/N on arc k
     # - optimize!, then extract the values of u and τ
     us = zeros(3)
     τs = ones(3)
@@ -112,10 +112,10 @@ end
 Solve once with the current measured at the initial position, then apply this control to the real system: the final point misses the target because the current actually varies with the position.
 
 ```julia
-P = 20 # number of points for direct solve
+N = 25 # number of time steps (N+1 points) for direct solve
 
 w0 = drift(x0, y0)
-us0, τs0 = solve_direct(x0, y0, θ0, xf, yf, θf, w0, P, print_level=0)
+us0, τs0 = solve_direct(x0, y0, θ0, xf, yf, θf, w0, N, print_level=0)
 tf0 = sum(τs0)
 sol0 = trajectory((t0, tf0), x0, y0, θ0, us0, [τs0[1], τs0[1]+τs0[2]], drift)
 println("open loop: tf = ", tf0, "\t final error: ", norm(sol0.u[end] - [xf, yf, θf]))
@@ -126,15 +126,15 @@ println("open loop: tf = ", tf0, "\t final error: ", norm(sol0.u[end] - [xf, yf,
 The loop is in a function, which avoids any ambiguity on the scope of the variables when the code is run as a script.
 
 ```julia
-function mpc(x0, y0, θ0, xf, yf, θf, drift; t0=0., Δt=1.0, P=20, ε=1e-1, Nmax=20)
+function mpc(x0, y0, θ0, xf, yf, θf, drift; t0=0., Δt=1.0, N=25, ε=1e-1, itermax=20)
 
     t1, x1, y1, θ1 = t0, x0, y0, θ0
     t, x, y, θ, u = Float64[], Float64[], Float64[], Float64[], Float64[]
 
-    for N in 1:Nmax+1
+    for iter in 1:itermax+1
 
         w = drift(x1, y1) # current sampled at (x1,y1)
-        us, τs = solve_direct(x1, y1, θ1, xf, yf, θf, w, P, print_level=0)
+        us, τs = solve_direct(x1, y1, θ1, xf, yf, θf, w, N, print_level=0)
         ts = [ t1+τs[1], t1+τs[1]+τs[2] ]
         tf = t1+sum(τs) # predicted final time
         t2 = min(t1+Δt, tf)
@@ -148,7 +148,7 @@ function mpc(x0, y0, θ0, xf, yf, θf, drift; t0=0., Δt=1.0, P=20, ε=1e-1, Nma
 
         t1, x1, y1, θ1 = t2, x[end], y[end], θ[end]
         err = norm([ x1, y1, θ1 ] - [ xf, yf, θf ])
-        println("N: ", N, "\t t: ", round(t1, digits=3), "\t predicted tf: ", round(tf, digits=3), "\t err: ", err)
+        println("iter: ", iter, "\t t: ", round(t1, digits=3), "\t predicted tf: ", round(tf, digits=3), "\t err: ", err)
         err > ε || break
 
     end
@@ -157,7 +157,7 @@ function mpc(x0, y0, θ0, xf, yf, θf, drift; t0=0., Δt=1.0, P=20, ε=1e-1, Nma
 
 end
 
-t, x, y, θ, u = mpc(x0, y0, θ0, xf, yf, θf, drift, t0=t0, Δt=1.0, P=P, ε=1e-1, Nmax=20)
+t, x, y, θ, u = mpc(x0, y0, θ0, xf, yf, θf, drift, t0=t0, Δt=1.0, N=N, ε=1e-1, itermax=20)
 ```
 
 ## Plots: states, control and trajectory
