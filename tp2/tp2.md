@@ -24,7 +24,7 @@ Résoudre le problème numériquement à l'aide d'une méthode de tir.
 ## Code
 
 ```julia
-using OptimalControl, OrdinaryDiffEq, MINPACK, Plots
+using OptimalControl, OrdinaryDiffEq, NonlinearSolve, Plots
 
 t0 = 0.0
 tf = 1.0
@@ -37,16 +37,16 @@ h(x, p) = 0.0 # TO BE UPDATED
 # Makes flow from Hamiltonian
 f = Flow(OptimalControl.Hamiltonian(h)) # (xf, pf) = f(t0, x0, p0, tf)
 
-# Shooting function
-function shoot!(s, p0)
+# Shooting function: in-place, with the signature (s, p0, parameters) required by NonlinearSolve
+function shoot!(s, p0, parameters)
     s[1] = 0.0 # TO BE UPDATED
 end
 
 # Solve
 p0_guess = 1.0 # initial guess
-sol_minpack = fsolve(shoot!, [p0_guess])
-sol_minpack.converged || error("MINPACK did not converge")
-p0 = sol_minpack.x[1]
+prob = NonlinearProblem(shoot!, [p0_guess])
+sol_nl = solve(prob; show_trace=Val(true))
+p0 = sol_nl.u[1]
 println("p0 = ", p0)
 
 # Plots

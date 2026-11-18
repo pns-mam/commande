@@ -34,7 +34,7 @@ The three arcs are glued by continuity of the state $(x,y,\theta)$.
 ## Problem definition
 
 ```julia
-using JuMP, Ipopt, Plots, OrdinaryDiffEq, LinearAlgebra
+using JuMP, Ipopt, Plots, OrdinaryDiffEqTsit5, LinearAlgebra
 
 t0 = 0.
 x0 = 0. 
