@@ -3,6 +3,8 @@
 # Commande optimale
 # 2026-27
 
+![Navigation](nav.gif)
+
 [Discussion](https://github.com/pns-mam/commande/discussions/1)
 
 [Plan du cours](cm/cm.md)
