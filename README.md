@@ -40,12 +40,13 @@
 
 # Organisation et intervenants
 
-- 10 séances de 3H
-- Intervenant [J.-B. Caillau](mailto:jean-baptiste.caillau@univ-cotedazur.fr)
+10 séances de 3H
+
+Intervenant [J.-B. Caillau](mailto:jean-baptiste.caillau@univ-cotedazur.fr)
 
 # Évaluation
 
-- 2 EX CC (tous deux coeff. 1)
+2 EX CC (tous deux coeff. 1)
 
 [Exam CC no. 1 (2025-26)](exam-cc1-old/exam-cc1.md)
 
