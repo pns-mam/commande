@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TP 2 - Tir simple</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+<script
+src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+type="text/javascript"></script>
+</head>
+<body>
+<nav><a href="../index.html">← Accueil</a> · <span>Dans ce dossier :</span> <a href="index.html">tp2</a></nav>
+<main>
+<p><img src="../logo-pns.png" alt="PNS" /></p>
+<h2 id="mam5-inum---commande-optimale">MAM5-INUM - Commande
+optimale</h2>
+<h1 id="tp-2---tir-simple"><strong>TP 2 - Tir simple</strong></h1>
+<p>On considère le problème de contrôle optimal suivant :</p>
+<p><span class="math display">\[ \frac{1}{2} \int_0^1
+|u(t)|^2\,\mathrm{d}t \to \min \]</span></p>
+<p>sous les contraintes</p>
+<p><span class="math display">\[ \dot{x}(t) = -x(t)+u(t),\quad u(t) \in
+\mathbf{R},\quad t \in [0,1], \]</span></p>
+<p><span class="math display">\[ x(0)=-1,\quad x(1)=0. \]</span></p>
+<p>Résoudre le problème numériquement à l'aide d'une méthode de tir.</p>
+<h2 id="principe-de-maximum-et-fonction-de-tir">Principe de maximum et
+fonction de tir</h2>
+<p>Pas de contrainte sur le contrôle et pas d'état final libre, donc pas
+de cas anormal à craindre ici : on prend <span
+class="math inline">\(p^0=-1\)</span>. Le pseudo-Hamiltonien est</p>
+<p><span class="math display">\[ H(x,p,u) = p\,(-x+u) - \frac{1}{2}u^2.
+\]</span></p>
+<p>Il est strictement concave en <span class="math inline">\(u\)</span>
+et le maximum est atteint en <span
+class="math inline">\(u(x,p)=p\)</span>. Le Hamiltonien maximisé vaut
+donc</p>
+<p><span class="math display">\[ h(x,p) = \max_{u \in \mathbf{R}}
+H(x,p,u) = \frac{p^2}{2} - p\,x. \]</span></p>
+<p>Les extrémales sont les solutions de <span
+class="math inline">\(\dot{x} = \partial_p h\)</span>, <span
+class="math inline">\(\dot{p} = -\partial_x h\)</span>, avec <span
+class="math inline">\(x(0)=-1\)</span> et <span
+class="math inline">\(p(0)=p_0\)</span> inconnu. La condition finale
+<span class="math inline">\(x(1)=0\)</span> donne l'équation de tir</p>
+<p><span class="math display">\[ S(p_0) = x(1,x_0,p_0) - x_f = 0.
+\]</span></p>
+<p><strong>Vérification analytique.</strong> Ici <span
+class="math inline">\(\dot{p}=p\)</span>, donc <span
+class="math inline">\(p(t)=p_0\mathrm{e}^t\)</span>, puis <span
+class="math inline">\(x(t) = -\mathrm{e}^{-t} + p_0\sinh t\)</span>. La
+condition <span class="math inline">\(x(1)=0\)</span> donne</p>
+<p><span class="math display">\[ p_0 = \frac{2}{\mathrm{e}^2-1} \approx
+0.3130, \qquad u(t)=p_0\mathrm{e}^t, \qquad \text{coût optimal }
+\frac{1}{\mathrm{e}^2-1} \approx 0.1565. \]</span></p>
+<p>La fonction de tir est affine en <span
+class="math inline">\(p_0\)</span> (système linéaire-quadratique) :
+Newton converge en une itération, ce que l'on observe dans la trace du
+solveur.</p>
+<h2 id="code">Code</h2>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">OptimalControl</span>, <span class="bu">OrdinaryDiffEq</span>, <span class="bu">NonlinearSolve</span>, <span class="bu">Plots</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>tf <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>x0 <span class="op">=</span> <span class="op">-</span><span class="fl">1.0</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>xf_fixed <span class="op">=</span> <span class="fl">0.0</span> <span class="co"># target</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Maximised Hamiltonian, with u = p: h(x, p) = p * (-x + u) - u^2 / 2</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">h</span>(x, p) <span class="op">=</span> p <span class="op">*</span> (<span class="op">-</span>x <span class="op">+</span> p) <span class="op">-</span> p<span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="fl">2</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Makes flow from Hamiltonian</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="fu">Flow</span>(OptimalControl.<span class="fu">Hamiltonian</span>(h)) <span class="co"># (xf, pf) = f(t0, x0, p0, tf)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Shooting function: in-place, with the signature (s, p0, parameters) required by NonlinearSolve</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">shoot!</span>(s, p0, parameters)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    xf, pf <span class="op">=</span> <span class="fu">f</span>(t0, x0, p0[<span class="fl">1</span>], tf)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    s[<span class="fl">1</span>] <span class="op">=</span> xf <span class="op">-</span> xf_fixed</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Solve</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>p0_guess <span class="op">=</span> <span class="fl">1.0</span> <span class="co"># initial guess</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>prob <span class="op">=</span> <span class="fu">NonlinearProblem</span>(shoot!, [p0_guess])</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>sol_nl <span class="op">=</span> <span class="fu">solve</span>(prob; show_trace<span class="op">=</span><span class="fu">Val</span>(<span class="cn">true</span>))</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>SciMLBase.<span class="fu">successful_retcode</span>(sol_nl) <span class="op">||</span> <span class="fu">error</span>(<span class="st">&quot;NonlinearSolve did not converge&quot;</span>)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>p0 <span class="op">=</span> sol_nl.u[<span class="fl">1</span>]</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Check against the exact value p0 = 2 / (exp(2) - 1)</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>p0_exact <span class="op">=</span> <span class="fl">2</span> <span class="op">/</span> (<span class="fu">exp</span>(<span class="fl">2</span>) <span class="op">-</span> <span class="fl">1</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;p0        = &quot;</span>, p0)</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;p0 (exact) = &quot;</span>, p0_exact)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;|p0 - p0_exact| = &quot;</span>, <span class="fu">abs</span>(p0 <span class="op">-</span> p0_exact))</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>guess <span class="op">=</span> <span class="fu">f</span>((t0, tf), x0, p0_guess)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>fig1 <span class="op">=</span> <span class="fu">plot</span>(guess, xlabel<span class="op">=</span><span class="st">&quot;t&quot;</span>, label<span class="op">=</span>[<span class="st">&quot;x (guess)&quot;</span> <span class="st">&quot;p (guess)&quot;</span>], linestyle<span class="op">=:</span>dash)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>traj <span class="op">=</span> <span class="fu">f</span>((t0, tf), x0, p0)</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="fu">plot!</span>(fig1, traj, label<span class="op">=</span>[<span class="st">&quot;x (sol)&quot;</span> <span class="st">&quot;p (sol)&quot;</span>], linestyle<span class="op">=:</span>solid)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="fu">plot!</span>(fig1, [t0, tf], [xf_fixed, xf_fixed], label<span class="op">=</span><span class="st">&quot;target&quot;</span>, colour<span class="op">=:</span>black)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Cost: u = p, so J = 1/2 * int_0^1 p(t)^2 dt (trapezoidal rule)</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>ts <span class="op">=</span> <span class="fu">range</span>(t0, tf, length<span class="op">=</span><span class="fl">1001</span>)</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>ps <span class="op">=</span> [<span class="fu">traj</span>(t)[<span class="fl">2</span>] for t <span class="kw">in</span> ts]</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>J <span class="op">=</span> (ts[<span class="fl">2</span>] <span class="op">-</span> ts[<span class="fl">1</span>]) <span class="op">*</span> (<span class="fu">sum</span>(abs2, ps) <span class="op">-</span> (ps[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> ps[<span class="kw">end</span>]<span class="op">^</span><span class="fl">2</span>) <span class="op">/</span> <span class="fl">2</span>) <span class="op">/</span> <span class="fl">2</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;cost J = &quot;</span>, J, <span class="st">&quot; (exact: &quot;</span>, <span class="fl">1</span> <span class="op">/</span> (<span class="fu">exp</span>(<span class="fl">2</span>) <span class="op">-</span> <span class="fl">1</span>), <span class="st">&quot;)&quot;</span>)</span></code></pre></div>
+</main>
+<script>
+// "Copier" button on every code block
+document.querySelectorAll("pre").forEach(function (pre) {
+  var box = pre.parentElement;
+  if (!box.classList.contains("sourceCode")) {
+    box = document.createElement("div");
+    box.className = "codewrap";
+    pre.parentNode.insertBefore(box, pre);
+    box.appendChild(pre);
+  }
+  var btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "copy-btn";
+  btn.textContent = "Copier";
+  btn.addEventListener("click", function () {
+    var text = (pre.querySelector("code") || pre).textContent;
+    var done = function () { btn.textContent = "Copié !"; setTimeout(function () { btn.textContent = "Copier"; }, 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { btn.textContent = "Erreur"; });
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) { btn.textContent = "Erreur"; }
+      document.body.removeChild(ta);
+    }
+  });
+  box.appendChild(btn);
+});
+</script>
+<footer>Page générée automatiquement à partir des fichiers Markdown du dépôt (pandoc, MathJax).</footer>
+</body>
+</html>
