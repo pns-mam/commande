@@ -81,4 +81,9 @@ ts = range(t0, tf, length=1001)
 ps = [traj(t)[2] for t in ts]
 J = (ts[2] - ts[1]) * (sum(abs2, ps) - (ps[1]^2 + ps[end]^2) / 2) / 2
 println("cost J = ", J, " (exact: ", 1 / (exp(2) - 1), ")")
+
+# Save the figure
+savefig(fig1, "tp2-sol.png")
 ```
+
+![Tir simple : état et état adjoint, initialisation (tirets) et solution](tp2-sol.png)
