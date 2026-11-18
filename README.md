@@ -25,6 +25,7 @@
 ([trailers](https://ct.gitlabpages.inria.fr/gallery/nav/nav-julia-gen.html))
 
 [TP 2 - Tir simple](tp2/tp2.md)
+([solution](tp2/tp2-sol.md))
 
 [TP 3 - MPC](tp3/tp3.md)
 
