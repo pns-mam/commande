@@ -6,8 +6,9 @@
 <title>TP 3 - Navigation problem (a.k.a. Zermelo-Markov-Dubins), MPC approach</title>
 <link rel="stylesheet" href="../style.css">
 <style>
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -81,8 +82,9 @@ type="text/javascript"></script>
 <h2 id="mam5-inum---commande-optimale">MAM5-INUM - Commande
 optimale</h2>
 <h1
-id="tp-3---navigation-problem-aka-zermelo-markov-dubins-mpc-approach">TP
-3 - Navigation problem (a.k.a. Zermelo-Markov-Dubins), MPC approach</h1>
+id="tp-3---navigation-problem-aka-zermelo-markov-dubins-mpc-approach"><strong>TP
+3 - Navigation problem (a.k.a. Zermelo-Markov-Dubins), MPC
+approach</strong></h1>
 <p>One considers a ship in a constant current <span
 class="math inline">\(w=(w_x,w_y)\)</span>, <span
 class="math inline">\(|w| \lt 1\)</span>. The angle of the velocity
@@ -94,8 +96,8 @@ dynamics:</p>
 \dot{\theta}(t) &amp;=&amp; u(t).
 \end{array} \]</span></p>
 <p>The turning rate (= curvature of turns) is limited, so <span
-class="math inline">\(|u(t)| \leq 1\)</span>. There boundary conditions
-at <span class="math inline">\(t=0\)</span> and <span
+class="math inline">\(|u(t)| \leq 1\)</span>. Boundary conditions are
+prescribed at <span class="math inline">\(t=0\)</span> and <span
 class="math inline">\(t=t_f\)</span> on the position <span
 class="math inline">\((x,y)\)</span> and on the angle <span
 class="math inline">\(\theta\)</span> of the velocity in the water
@@ -104,6 +106,57 @@ from a collaboration with the French company <a
 href="https://www.cgg.com">CGG</a> that is interested in optimal
 maneuvers for very large ships doing marine prospection.</p>
 <p><img src="ship.jpg" alt="ship" /></p>
+<p>In practice the current is not constant, it depends on the position,
+and it is only known at the current position of the ship. One therefore
+cannot compute the optimal trajectory once and for all: the idea of
+<em>model predictive control</em> (MPC) is to solve, at each step, the
+problem for a constant current (the one measured at the current
+position), apply the control for a short time <span
+class="math inline">\(\Delta t\)</span>, and start again from the new
+state.</p>
+<h2 id="discretisation">Discretisation</h2>
+<p>The open-loop problem (constant current) is solved by a direct
+method. The structure of the solution is assumed to be <strong>three
+arcs</strong> on which the control is constant: <span
+class="math inline">\(u=u_k \in [-1,1]\)</span> on the <span
+class="math inline">\(k\)</span>-th arc, whose duration <span
+class="math inline">\(\tau_k \geq 0\)</span> is an unknown. The final
+time is <span class="math inline">\(t_f=\tau_1+\tau_2+\tau_3\)</span>.
+On each arc, time is rescaled to <span
+class="math inline">\(s\in[0,1]\)</span>, so that <span
+class="math inline">\(t=\tau_k s\)</span> and the dynamics become <span
+class="math inline">\(\mathrm{d}X/\mathrm{d}s = \tau_k
+F(X,u_k)\)</span>. With <span class="math inline">\(P\)</span> points
+<span class="math inline">\(s_j=(j-1)/(P-1)\)</span>, that is <span
+class="math inline">\(P-1\)</span> steps of length <span
+class="math inline">\(1/(P-1)\)</span>, the Crank-Nicolson scheme
+reads</p>
+<p><span class="math display">\[ X_{j+1} = X_j +
+\frac{\tau_k}{P-1}\cdot\frac{F(X_j,u_k)+F(X_{j+1},u_k)}{2},\quad
+j=1,\dots,P-1. \]</span></p>
+<p>The three arcs are glued by continuity of the state <span
+class="math inline">\((x,y,\theta)\)</span>.</p>
+<h2 id="questions">Questions</h2>
+<ol type="1">
+<li>Why does the discretisation of an arc with <span
+class="math inline">\(P\)</span> points involve <span
+class="math inline">\(P-1\)</span> steps of length <span
+class="math inline">\(\tau_k/(P-1)\)</span>, and not <span
+class="math inline">\(\tau_k/P\)</span> ?</li>
+<li>Complete the function <code>solve_direct</code> (JuMP model, solved
+with Ipopt) : variables, objective, boundary conditions, continuity
+between arcs, Crank-Nicolson dynamics. Check that it returns <span
+class="math inline">\(u_1\simeq 1\)</span>, <span
+class="math inline">\(u_3\simeq -1\)</span> for the data given.</li>
+<li>Open loop : simulate the control found for the constant current
+<span class="math inline">\(w(x_0,y_0)\)</span> on the real system. How
+far from the target is the final point? How does it change with <span
+class="math inline">\(P\)</span>?</li>
+<li>MPC : run the loop and compare with the open-loop trajectory. What
+is the influence of <span class="math inline">\(\Delta t\)</span>, <span
+class="math inline">\(\varepsilon\)</span> and <span
+class="math inline">\(P\)</span> ?</li>
+</ol>
 <h2 id="problem-definition">Problem definition</h2>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">JuMP</span>, <span class="bu">Ipopt</span>, <span class="bu">Plots</span>, <span class="bu">OrdinaryDiffEq</span>, <span class="bu">LinearAlgebra</span></span>
@@ -114,7 +167,7 @@ class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>θ<span class="fl">0</span> <span class="op">=</span> <span class="cn">π</span><span class="op">/</span><span class="fl">7</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>xf <span class="op">=</span> <span class="fl">4</span>.</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>yf <span class="op">=</span> <span class="fl">7</span>.</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>θf <span class="op">=-</span><span class="cn">π</span><span class="op">/</span><span class="fl">2</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>θf <span class="op">=</span> <span class="op">-</span><span class="cn">π</span><span class="op">/</span><span class="fl">2</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">drift</span>(x, y) <span class="co"># current as a function of position</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    ε <span class="op">=</span> <span class="fl">1e-2</span></span>
@@ -128,24 +181,30 @@ class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <h2 id="solver-jump">Solver (JuMP)</h2>
 <div class="sourceCode" id="cb2"><pre
-class="sourceCode julia"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">solve</span>(x0, y0, θ<span class="fl">0</span>, xf, yf, θf, w, P<span class="op">=</span><span class="fl">50</span>; tol<span class="op">=</span><span class="fl">1e-8</span>, max_iter<span class="op">=</span><span class="fl">500</span>, print_level<span class="op">=</span><span class="fl">5</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    sys <span class="op">=</span> <span class="fu">Model</span>(<span class="fu">optimizer_with_attributes</span>(Ipopt.Optimizer,<span class="st">&quot;print_level&quot;</span><span class="op">=&gt;</span>print_level))</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set_optimizer_attribute</span>(sys, <span class="st">&quot;tol&quot;</span>, tol)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set_optimizer_attribute</span>(sys, <span class="st">&quot;max_iter&quot;</span>, max_iter)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># TO BE UPDATED</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    us <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">3</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    τs <span class="op">=</span> <span class="fu">ones</span>(<span class="fl">3</span>)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> us, τs</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">solve_direct</span>(x0, y0, θ<span class="fl">0</span>, xf, yf, θf, w, P<span class="op">=</span><span class="fl">50</span>; tol<span class="op">=</span><span class="fl">1e-8</span>, max_iter<span class="op">=</span><span class="fl">500</span>, print_level<span class="op">=</span><span class="fl">5</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    sys <span class="op">=</span> <span class="fu">Model</span>(Ipopt.Optimizer)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set_attribute</span>(sys, <span class="st">&quot;print_level&quot;</span>, print_level)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set_attribute</span>(sys, <span class="st">&quot;tol&quot;</span>, tol)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set_attribute</span>(sys, <span class="st">&quot;max_iter&quot;</span>, max_iter)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># TO BE UPDATED</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># - variables: x, y, θ (3 arcs x P points), u (3 values in [-1, 1]), τ (3 durations &gt;= 0)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># - objective: final time</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># - boundary conditions and continuity between the arcs</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># - dynamics: Crank-Nicolson scheme, P-1 steps of length τ[k]/(P-1) on arc k</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># - optimize!, then extract the values of u and τ</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    us <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">3</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    τs <span class="op">=</span> <span class="fu">ones</span>(<span class="fl">3</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> us, τs</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
 <h2 id="simulation-of-the-real-system">Simulation of the real
 system</h2>
 <div class="sourceCode" id="cb3"><pre
 class="sourceCode julia"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">trajectory</span>(tspan, x0, y0, θ<span class="fl">0</span>, us, ts, drift; abstol<span class="op">=</span><span class="fl">1e-12</span>, reltol<span class="op">=</span><span class="fl">1e-12</span>, saveat<span class="op">=</span>[])</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">function</span> <span class="fu">rhs!</span>(dX, X, dummy, t)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> <span class="fu">drift</span>(X[<span class="fl">1</span>], X[<span class="fl">2</span>])</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> t <span class="op">&lt;</span> ts[<span class="fl">1</span>]</span>
@@ -159,83 +218,81 @@ class="sourceCode julia"><code class="sourceCode julia"><span id="cb3-1"><a href
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        dX[<span class="fl">2</span>] <span class="op">=</span> w[<span class="fl">2</span>]<span class="fu">+sin</span>(X[<span class="fl">3</span>])</span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        dX[<span class="fl">3</span>] <span class="op">=</span> u</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    X0 <span class="op">=</span> [ x0, y0, θ<span class="fl">0</span> ]</span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    ode <span class="op">=</span> <span class="fu">ODEProblem</span>(rhs!, X0, tspan)</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    sol <span class="op">=</span> OrdinaryDiffEq.<span class="fu">solve</span>(ode, <span class="fu">Tsit5</span>(), abstol<span class="op">=</span>abstol, reltol<span class="op">=</span>reltol, saveat<span class="op">=</span>saveat)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    sol <span class="op">=</span> <span class="fu">solve</span>(ode, <span class="fu">Tsit5</span>(), abstol<span class="op">=</span>abstol, reltol<span class="op">=</span>reltol, saveat<span class="op">=</span>saveat)</span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sol</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code></pre></div>
-<h2 id="main-loop">Main loop</h2>
+<h2 id="open-loop-control-no-feedback">Open-loop control (no
+feedback)</h2>
+<p>Solve once with the current measured at the initial position, then
+apply this control to the real system: the final point misses the target
+because the current actually varies with the position.</p>
 <div class="sourceCode" id="cb4"><pre
-class="sourceCode julia"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Nmax <span class="op">=</span> <span class="fl">20</span>      <span class="co"># max number iterations</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ε <span class="op">=</span> <span class="fl">1e-1</span>       <span class="co"># final condition threshold</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>Δt <span class="op">=</span> <span class="fl">1.0</span>       <span class="co"># fixed time step for MPC</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> <span class="fl">20</span>         <span class="co"># number of points for direct solve</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>t1 <span class="op">=</span> t0</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> x0</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>y1 <span class="op">=</span> y0</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>θ<span class="fl">1</span> <span class="op">=</span> θ<span class="fl">0</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> [ ]</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [ ]</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> [ ]</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>θ <span class="op">=</span> [ ]</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> [ ]</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="fl">1</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="cn">true</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    w <span class="op">=</span> <span class="fu">drift</span>(x1, y1) <span class="co"># current sampled at (x1,y1)</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    us, τs <span class="op">=</span> <span class="fu">solve</span>(x1, y1, θ<span class="fl">1</span>, xf, yf, θf, w, P, print_level<span class="op">=</span><span class="fl">0</span>)</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    ts <span class="op">=</span> [ t1<span class="op">+</span>τs[<span class="fl">1</span>], t1<span class="op">+</span>τs[<span class="fl">1</span>]<span class="op">+</span>τs[<span class="fl">2</span>] ]</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    tf <span class="op">=</span> t1<span class="op">+</span>τs[<span class="fl">1</span>]<span class="op">+</span>τs[<span class="fl">2</span>]<span class="op">+</span>τs[<span class="fl">3</span>]</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (t1<span class="op">+</span>Δt <span class="op">&lt;</span> tf)</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        t2 <span class="op">=</span> t1<span class="op">+</span>Δt</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        t2 <span class="op">=</span> tf</span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>        <span class="fu">println</span>(<span class="st">&quot;t2=tf: &quot;</span>, t2)</span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    sol <span class="op">=</span> <span class="fu">trajectory</span>((t1, t2), x1, y1, θ<span class="fl">1</span>, us, ts, drift)</span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> [ t ; sol.t ]</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> [ x ; sol[<span class="fl">1</span>, <span class="op">:</span>] ]</span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> [ y ; sol[<span class="fl">2</span>, <span class="op">:</span>] ]</span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    θ <span class="op">=</span> [ θ ; sol[<span class="fl">3</span>, <span class="op">:</span>] ]</span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    uu <span class="op">=</span> <span class="fu">zeros</span>(<span class="fu">length</span>(sol.t))</span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    uu[ <span class="fu">findall</span>(sol.t <span class="op">.&lt;</span> ts[<span class="fl">1</span>]) ] <span class="op">.=</span> us[<span class="fl">1</span>]</span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    uu[ <span class="fu">findall</span>(ts[<span class="fl">1</span>] <span class="op">.&lt;=</span> sol.t <span class="op">.&lt;</span> ts[<span class="fl">2</span>]) ] <span class="op">.=</span> us[<span class="fl">2</span>]</span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    uu[ <span class="fu">findall</span>(sol.t <span class="op">.&gt;=</span> ts[<span class="fl">2</span>]) ] <span class="op">.=</span> us[<span class="fl">3</span>]</span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    u <span class="op">=</span> [ u ; uu ]</span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    t1 <span class="op">=</span> t2</span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    x1 <span class="op">=</span> x[<span class="kw">end</span>]</span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    y1 <span class="op">=</span> y[<span class="kw">end</span>]</span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    θ<span class="fl">1</span> <span class="op">=</span> θ[<span class="kw">end</span>]</span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>    err <span class="op">=</span> <span class="fu">norm</span>([ x1, y1, θ<span class="fl">1</span> ] <span class="op">-</span> [ xf, yf, θf ])</span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="st">&quot;N: &quot;</span>, N, <span class="st">&quot;</span><span class="sc">\t</span><span class="st"> err: &quot;</span>, err)</span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    ((err <span class="op">&gt;</span> ε) <span class="op">&amp;&amp;</span> (N <span class="op">&lt;=</span> Nmax)) <span class="op">||</span> <span class="cf">break</span></span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> N<span class="op">+</span><span class="fl">1</span></span>
-<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> <span class="fl">20</span> <span class="co"># number of points for direct solve</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> <span class="fu">drift</span>(x0, y0)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>us0, τs0 <span class="op">=</span> <span class="fu">solve_direct</span>(x0, y0, θ<span class="fl">0</span>, xf, yf, θf, w0, P, print_level<span class="op">=</span><span class="fl">0</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>tf0 <span class="op">=</span> <span class="fu">sum</span>(τs0)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>sol0 <span class="op">=</span> <span class="fu">trajectory</span>((t0, tf0), x0, y0, θ<span class="fl">0</span>, us0, [τs0[<span class="fl">1</span>], τs0[<span class="fl">1</span>]<span class="op">+</span>τs0[<span class="fl">2</span>]], drift)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;open loop: tf = &quot;</span>, tf0, <span class="st">&quot;</span><span class="sc">\t</span><span class="st"> final error: &quot;</span>, <span class="fu">norm</span>(sol0.u[<span class="kw">end</span>] <span class="op">-</span> [xf, yf, θf]))</span></code></pre></div>
+<h2 id="main-loop-mpc">Main loop (MPC)</h2>
+<p>The loop is in a function, which avoids any ambiguity on the scope of
+the variables when the code is run as a script.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">mpc</span>(x0, y0, θ<span class="fl">0</span>, xf, yf, θf, drift; t0<span class="op">=</span><span class="fl">0</span>., Δt<span class="op">=</span><span class="fl">1.0</span>, P<span class="op">=</span><span class="fl">20</span>, ε<span class="op">=</span><span class="fl">1e-1</span>, Nmax<span class="op">=</span><span class="fl">20</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    t1, x1, y1, θ<span class="fl">1</span> <span class="op">=</span> t0, x0, y0, θ<span class="fl">0</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    t, x, y, θ, u <span class="op">=</span> <span class="dt">Float64</span>[], <span class="dt">Float64</span>[], <span class="dt">Float64</span>[], <span class="dt">Float64</span>[], <span class="dt">Float64</span>[]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> N <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>Nmax<span class="op">+</span><span class="fl">1</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        w <span class="op">=</span> <span class="fu">drift</span>(x1, y1) <span class="co"># current sampled at (x1,y1)</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        us, τs <span class="op">=</span> <span class="fu">solve_direct</span>(x1, y1, θ<span class="fl">1</span>, xf, yf, θf, w, P, print_level<span class="op">=</span><span class="fl">0</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        ts <span class="op">=</span> [ t1<span class="op">+</span>τs[<span class="fl">1</span>], t1<span class="op">+</span>τs[<span class="fl">1</span>]<span class="op">+</span>τs[<span class="fl">2</span>] ]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        tf <span class="op">=</span> <span class="fu">t1+sum</span>(τs) <span class="co"># predicted final time</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        t2 <span class="op">=</span> <span class="fu">min</span>(t1<span class="op">+</span>Δt, tf)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        sol <span class="op">=</span> <span class="fu">trajectory</span>((t1, t2), x1, y1, θ<span class="fl">1</span>, us, ts, drift)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        <span class="fu">append!</span>(t, sol.t)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">append!</span>(x, sol[<span class="fl">1</span>, <span class="op">:</span>])</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">append!</span>(y, sol[<span class="fl">2</span>, <span class="op">:</span>])</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">append!</span>(θ, sol[<span class="fl">3</span>, <span class="op">:</span>])</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">append!</span>(u, [ s <span class="op">&lt;</span> ts[<span class="fl">1</span>] ? us[<span class="fl">1</span>] <span class="op">:</span> s <span class="op">&lt;</span> ts[<span class="fl">2</span>] ? us[<span class="fl">2</span>] <span class="op">:</span> us[<span class="fl">3</span>] for s <span class="kw">in</span> sol.t ])</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        t1, x1, y1, θ<span class="fl">1</span> <span class="op">=</span> t2, x[<span class="kw">end</span>], y[<span class="kw">end</span>], θ[<span class="kw">end</span>]</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        err <span class="op">=</span> <span class="fu">norm</span>([ x1, y1, θ<span class="fl">1</span> ] <span class="op">-</span> [ xf, yf, θf ])</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        <span class="fu">println</span>(<span class="st">&quot;N: &quot;</span>, N, <span class="st">&quot;</span><span class="sc">\t</span><span class="st"> t: &quot;</span>, <span class="fu">round</span>(t1, digits<span class="op">=</span><span class="fl">3</span>), <span class="st">&quot;</span><span class="sc">\t</span><span class="st"> predicted tf: &quot;</span>, <span class="fu">round</span>(tf, digits<span class="op">=</span><span class="fl">3</span>), <span class="st">&quot;</span><span class="sc">\t</span><span class="st"> err: &quot;</span>, err)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        err <span class="op">&gt;</span> ε <span class="op">||</span> <span class="cf">break</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> t, x, y, θ, u</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>t, x, y, θ, u <span class="op">=</span> <span class="fu">mpc</span>(x0, y0, θ<span class="fl">0</span>, xf, yf, θf, drift, t0<span class="op">=</span>t0, Δt<span class="op">=</span><span class="fl">1.0</span>, P<span class="op">=</span>P, ε<span class="op">=</span><span class="fl">1e-1</span>, Nmax<span class="op">=</span><span class="fl">20</span>)</span></code></pre></div>
 <h2 id="plots-states-control-and-trajectory">Plots: states, control and
 trajectory</h2>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode julia"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>x_plot <span class="op">=</span> <span class="fu">plot</span>(t, x, xlabel<span class="op">=</span><span class="st">&quot;t&quot;</span>, ylabel<span class="op">=</span><span class="st">&quot;position x&quot;</span>, legend<span class="op">=</span><span class="cn">false</span>, fmt<span class="op">=:</span>png)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>y_plot <span class="op">=</span> <span class="fu">plot</span>(t, y, xlabel<span class="op">=</span><span class="st">&quot;t&quot;</span>, ylabel<span class="op">=</span><span class="st">&quot;position y&quot;</span>, legend<span class="op">=</span> <span class="cn">false</span>, fmt<span class="op">=:</span>png)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>θ_plot <span class="op">=</span> <span class="fu">plot</span>(t, θ, xlabel<span class="op">=</span><span class="st">&quot;t&quot;</span>, ylabel<span class="op">=</span><span class="st">&quot;θ&quot;</span>, legend<span class="op">=</span><span class="cn">false</span>, fmt<span class="op">=:</span>png)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>u_plot <span class="op">=</span> <span class="fu">plot</span>(t, u, xlabel<span class="op">=</span><span class="st">&quot;t&quot;</span>, ylabel<span class="op">=</span><span class="st">&quot;control&quot;</span>, legend<span class="op">=</span><span class="cn">false</span>, fmt<span class="op">=:</span>png)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(<span class="fu">plot</span>(x_plot, y_plot, θ_plot, u_plot, layout <span class="op">=</span> (<span class="fl">2</span>,<span class="fl">2</span>)))</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>traj_plot <span class="op">=</span> <span class="fu">plot</span>(x, y, color<span class="op">=:</span>black, lw<span class="op">=</span><span class="fl">3</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot!</span>(size<span class="op">=</span>(<span class="fl">600</span>,<span class="fl">600</span>))</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>step <span class="op">=</span> <span class="fl">5</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="op">=</span> <span class="fl">1</span><span class="op">:</span>step<span class="op">:</span><span class="fu">length</span>(t)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot!</span>([ x[i] ], [ y[i] ], seriestype <span class="op">=</span> <span class="op">:</span>scatter, color <span class="op">=:</span>red, legend <span class="op">=</span> <span class="cn">false</span>) </span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(traj_plot)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode julia"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>x_plot <span class="op">=</span> <span class="fu">plot</span>(t, x, xlabel<span class="op">=</span><span class="st">&quot;t&quot;</span>, ylabel<span class="op">=</span><span class="st">&quot;position x&quot;</span>, legend<span class="op">=</span><span class="cn">false</span>, fmt<span class="op">=:</span>png)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>y_plot <span class="op">=</span> <span class="fu">plot</span>(t, y, xlabel<span class="op">=</span><span class="st">&quot;t&quot;</span>, ylabel<span class="op">=</span><span class="st">&quot;position y&quot;</span>, legend<span class="op">=</span><span class="cn">false</span>, fmt<span class="op">=:</span>png)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>θ_plot <span class="op">=</span> <span class="fu">plot</span>(t, θ, xlabel<span class="op">=</span><span class="st">&quot;t&quot;</span>, ylabel<span class="op">=</span><span class="st">&quot;θ&quot;</span>, legend<span class="op">=</span><span class="cn">false</span>, fmt<span class="op">=:</span>png)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>u_plot <span class="op">=</span> <span class="fu">plot</span>(t, u, xlabel<span class="op">=</span><span class="st">&quot;t&quot;</span>, ylabel<span class="op">=</span><span class="st">&quot;control&quot;</span>, legend<span class="op">=</span><span class="cn">false</span>, fmt<span class="op">=:</span>png)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(<span class="fu">plot</span>(x_plot, y_plot, θ_plot, u_plot, layout <span class="op">=</span> (<span class="fl">2</span>,<span class="fl">2</span>)))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>traj_plot <span class="op">=</span> <span class="fu">plot</span>(x, y, color<span class="op">=:</span>black, lw<span class="op">=</span><span class="fl">3</span>, label<span class="op">=</span><span class="st">&quot;MPC&quot;</span>, xlabel<span class="op">=</span><span class="st">&quot;x&quot;</span>, ylabel<span class="op">=</span><span class="st">&quot;y&quot;</span>, legend<span class="op">=:</span>topleft)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot!</span>(traj_plot, sol0[<span class="fl">1</span>, <span class="op">:</span>], sol0[<span class="fl">2</span>, <span class="op">:</span>], color<span class="op">=:</span>blue, lw<span class="op">=</span><span class="fl">2</span>, linestyle<span class="op">=:</span>dash, label<span class="op">=</span><span class="st">&quot;open loop&quot;</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot!</span>(traj_plot, [x0, xf], [y0, yf], seriestype<span class="op">=:</span>scatter, color<span class="op">=:</span>green, markersize<span class="op">=</span><span class="fl">6</span>, label<span class="op">=</span><span class="st">&quot;start / target&quot;</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot!</span>(size<span class="op">=</span>(<span class="fl">600</span>,<span class="fl">600</span>))</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>step <span class="op">=</span> <span class="fl">5</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="op">=</span> <span class="fl">1</span><span class="op">:</span>step<span class="op">:</span><span class="fu">length</span>(t)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot!</span>([ x[i] ], [ y[i] ], seriestype <span class="op">=</span> <span class="op">:</span>scatter, color <span class="op">=:</span>red, label<span class="op">=</span><span class="cn">false</span>) </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="fu">display</span>(traj_plot)</span></code></pre></div>
 </main>
 <script>
 // "Copier" button on every code block
