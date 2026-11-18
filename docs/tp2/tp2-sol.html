@@ -168,7 +168,12 @@ class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href
 <span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>ts <span class="op">=</span> <span class="fu">range</span>(t0, tf, length<span class="op">=</span><span class="fl">1001</span>)</span>
 <span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>ps <span class="op">=</span> [<span class="fu">traj</span>(t)[<span class="fl">2</span>] for t <span class="kw">in</span> ts]</span>
 <span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>J <span class="op">=</span> (ts[<span class="fl">2</span>] <span class="op">-</span> ts[<span class="fl">1</span>]) <span class="op">*</span> (<span class="fu">sum</span>(abs2, ps) <span class="op">-</span> (ps[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> ps[<span class="kw">end</span>]<span class="op">^</span><span class="fl">2</span>) <span class="op">/</span> <span class="fl">2</span>) <span class="op">/</span> <span class="fl">2</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;cost J = &quot;</span>, J, <span class="st">&quot; (exact: &quot;</span>, <span class="fl">1</span> <span class="op">/</span> (<span class="fu">exp</span>(<span class="fl">2</span>) <span class="op">-</span> <span class="fl">1</span>), <span class="st">&quot;)&quot;</span>)</span></code></pre></div>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(<span class="st">&quot;cost J = &quot;</span>, J, <span class="st">&quot; (exact: &quot;</span>, <span class="fl">1</span> <span class="op">/</span> (<span class="fu">exp</span>(<span class="fl">2</span>) <span class="op">-</span> <span class="fl">1</span>), <span class="st">&quot;)&quot;</span>)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the figure</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="fu">savefig</span>(fig1, <span class="st">&quot;tp2-sol.png&quot;</span>)</span></code></pre></div>
+<p><img src="tp2-sol.png"
+alt="Tir simple : état et état adjoint, initialisation (tirets) et solution" /></p>
 </main>
 <script>
 // "Copier" button on every code block
