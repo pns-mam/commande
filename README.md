@@ -18,7 +18,7 @@
 
 [TP 2 - Tir simple](tp2/tp2.md)
 ([solution](tp2/tp2-sol.md))
-([Kepler](https://control-toolbox.org/Kepler.jl))
+([Kepler](https://control-toolbox.org/Kepler.jl/dev))
 
 [TP 3 - MPC](tp3/tp3.md)
 
